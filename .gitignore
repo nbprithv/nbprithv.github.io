@@ -1,2 +1,4 @@
 .idea*
 Gemfile.lock
+.sass-cache/*
+_site/*
