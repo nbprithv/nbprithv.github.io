@@ -12,7 +12,6 @@ markdown:  kramdown
 permalink: /writing/:title/
 
 plugins:
-  - jekyll-feed
   - jekyll-sitemap
 
 exclude:

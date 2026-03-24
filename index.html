@@ -4,25 +4,42 @@ layout: default
 <main>
   <header class="site-header">
     <h1>Niranjan Prithviraj</h1>
-    <p class="bio">Software engineer with 15+ years of building things. Writing about tech, ideas, and whatever else comes to mind.</p>
+    <p class="bio">Software engineer. 15+ years building things.</p>
     <nav class="social">
       <a href="https://github.com/nbprithv" target="_blank" rel="noopener">GitHub</a>
       <a href="https://twitter.com/nprithvi" target="_blank" rel="noopener">Twitter</a>
       <a href="mailto:niranjan.prithviraj@gmail.com">Email</a>
+      <a href="/resume">Resume</a>
     </nav>
   </header>
 
-  {% if site.posts.size > 0 %}
   <section>
     <p class="section-label">Writing</p>
     <ul class="post-list">
-      {% for post in site.posts %}
       <li>
-        <a href="{{ post.url }}">{{ post.title }}</a>
-        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %Y" }}</time>
+        <div class="post-info">
+          <a href="https://niranjanprithviraj.substack.com/p/advent-of-value-engineers" target="_blank" rel="noopener">Advent of Value Engineers</a>
+          <p class="post-excerpt">On AI, ambition, and the collapse of the engineering stack.</p>
+        </div>
+        <time>Mar 2026</time>
       </li>
-      {% endfor %}
+      <li>
+        <div class="post-info">
+          <a href="https://niranjanprithviraj.substack.com/p/crcl-make-it-make-sense" target="_blank" rel="noopener">CRCL: Make It Make Sense</a>
+          <p class="post-excerpt">Why the IPO is critical to build trust and usage.</p>
+        </div>
+        <time>Jun 2025</time>
+      </li>
+      <li>
+        <div class="post-info">
+          <a href="https://niranjanprithviraj.substack.com/p/think-in-systems-not-parts" target="_blank" rel="noopener">Think in Systems, Not Parts</a>
+          <p class="post-excerpt">Great engineers don't just ship features — they design systems that scale thinking, execution, and impact.</p>
+        </div>
+        <time>Apr 2025</time>
+      </li>
     </ul>
+    <p class="substack-link">
+      <a href="https://niranjanprithviraj.substack.com" target="_blank" rel="noopener">All posts on Substack →</a>
+    </p>
   </section>
-  {% endif %}
 </main>
