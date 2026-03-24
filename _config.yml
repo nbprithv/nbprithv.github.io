@@ -1,22 +1,25 @@
-title:              NBP
-email:              niranjan.prithviraj@gmail.com
-description:        Generated posts
-author:             Niranjan
-baseurl:            "/"
-url:                "http://niranjanprithviraj.com"
+title:       Niranjan Prithviraj
+author:      Niranjan Prithviraj
+description: Software engineer writing about tech and ideas.
+email:       niranjan.prithviraj@gmail.com
+url:         https://niranjanprithviraj.com
+baseurl:     ""
 
-# Social Profiles
-twitter_username:   nprithvi
-github_username:    nbprithv
+twitter_username: nprithvi
+github_username:  nbprithv
 
-# Add your google-analytics ID here to activate google analytics
-google_analytics:   UA-XXXXXXXXX-X # out your google-analytics code
+markdown:  kramdown
+permalink: /writing/:title/
 
-# Build settings
-markdown:           kramdown
-paginate:           5
-paginate_path:      "/posts/page:num/"
 plugins:
   - jekyll-feed
-  - jekyll-paginate
-  - jekyll-sitemap ## Uncomment this line to silently generate a sitemaps.org compliant sitemap for your Jekyll site
+  - jekyll-sitemap
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - package.json
+  - package-lock.json
+  - README.md
+  - "*.sh"

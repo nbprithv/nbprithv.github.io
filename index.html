@@ -1,4 +1,28 @@
 ---
-layout: home
-background: '/img/bg-index.jpg'
+layout: default
 ---
+<main>
+  <header class="site-header">
+    <h1>Niranjan Prithviraj</h1>
+    <p class="bio">Software engineer with 15+ years of building things. Writing about tech, ideas, and whatever else comes to mind.</p>
+    <nav class="social">
+      <a href="https://github.com/nbprithv" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://twitter.com/nprithvi" target="_blank" rel="noopener">Twitter</a>
+      <a href="mailto:niranjan.prithviraj@gmail.com">Email</a>
+    </nav>
+  </header>
+
+  {% if site.posts.size > 0 %}
+  <section>
+    <p class="section-label">Writing</p>
+    <ul class="post-list">
+      {% for post in site.posts %}
+      <li>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %Y" }}</time>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+</main>
