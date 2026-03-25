@@ -22,7 +22,7 @@
 
   <aside class="sidebar">
     <a href="/" class="sidebar-logo">Niranjan Prithviraj</a>
-    <nav class="sidebar-links">
+    <nav class="sidebar-links" id="sidebar-links">
       <a href="/background">Background</a>
       <a href="/writing">Writing</a>
       <a href="/bookshelf">Bookshelf</a>
@@ -30,6 +30,17 @@
       <a href="https://www.linkedin.com/in/niranjanprithviraj/" target="_blank" rel="noopener">LinkedIn</a>
     </nav>
     <div class="sidebar-bottom">
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="
+        var nav = document.getElementById('sidebar-links');
+        var open = nav.classList.toggle('mobile-open');
+        this.setAttribute('aria-expanded', open);
+      ">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <line x1="2" y1="4" x2="14" y2="4"/>
+          <line x1="2" y1="8" x2="14" y2="8"/>
+          <line x1="2" y1="12" x2="14" y2="12"/>
+        </svg>
+      </button>
       <button class="theme-toggle" aria-label="Toggle theme" onclick="
         var h = document.documentElement;
         var next = h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
