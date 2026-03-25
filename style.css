@@ -422,6 +422,54 @@ time {
 .content a:hover { opacity: 0.7; }
 .content strong { font-weight: 500; color: var(--fg); }
 
+/* ─── Timeline ─── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 1.5px solid var(--border-mid);
+  margin-left: 6px;
+}
+.tl-item {
+  display: flex;
+  gap: 1.25rem;
+  position: relative;
+  padding: 0 0 2rem 1.5rem;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-marker {
+  position: absolute;
+  left: -5px;
+  top: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 2px solid var(--bg);
+  flex-shrink: 0;
+}
+.tl-body { display: flex; flex-direction: column; gap: 3px; }
+.tl-meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.tl-role {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--fg);
+  line-height: 1.4;
+}
+.tl-summary {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  font-weight: 300;
+  margin-top: 2px;
+}
+
 /* ─── 404 ─── */
 .error-page { text-align: center; padding: 5rem 2rem; }
 .error-page h1 { font-family: var(--font-serif); font-size: 5rem; margin-bottom: 0.5rem; opacity: 0.15; }
