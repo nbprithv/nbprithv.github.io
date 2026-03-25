@@ -20,14 +20,14 @@
 </head>
 <body>
 
-  <nav class="nav">
-    <a href="/" class="nav-logo">Niranjan Prithviraj</a>
-    <div class="nav-right">
-      <div class="nav-links">
-        <a href="/writing">Writing</a>
-        <a href="/bookshelf">Bookshelf</a>
-        <a href="https://github.com/nbprithv" target="_blank" rel="noopener">GitHub</a>
-      </div>
+  <aside class="sidebar">
+    <a href="/" class="sidebar-logo">Niranjan Prithviraj</a>
+    <nav class="sidebar-links">
+      <a href="/writing">Writing</a>
+      <a href="/bookshelf">Bookshelf</a>
+      <a href="https://github.com/nbprithv" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div class="sidebar-bottom">
       <button class="theme-toggle" aria-label="Toggle theme" onclick="
         var h = document.documentElement;
         var next = h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -46,15 +46,11 @@
         </svg>
       </button>
     </div>
-  </nav>
+  </aside>
 
-  {{ content }}
-
-  <footer class="footer">
-    <div class="footer-inner">
-      <span class="footer-name">Niranjan Prithviraj</span>
-    </div>
-  </footer>
+  <div class="content-wrap">
+    {{ content }}
+  </div>
 
 </body>
 </html>
