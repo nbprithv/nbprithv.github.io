@@ -205,57 +205,12 @@ permalink: /bookshelf/
   font-weight: 300;
   margin-bottom: 10px;
 }
-.book-notes-label {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-  margin-bottom: 4px;
-}
 .book-notes {
   font-size: 0.83rem;
   color: var(--fg-muted);
   line-height: 1.6;
   font-weight: 300;
 }
-.book-notes-input {
-  width: 100%;
-  font-family: var(--font-sans);
-  font-size: 0.83rem;
-  background: var(--bg-surface);
-  border: 0.5px solid var(--border-mid);
-  border-radius: var(--radius-sm);
-  color: var(--fg);
-  padding: 6px 8px;
-  resize: vertical;
-  line-height: 1.6;
-  box-sizing: border-box;
-}
-.book-notes-input:focus { outline: none; border-color: var(--fg-faint); }
-.book-notes-save {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
-  margin-top: 4px;
-  background: var(--bg-card);
-  border: 0.5px solid var(--border-mid);
-  border-radius: var(--radius-sm);
-  color: var(--fg);
-  padding: 4px 10px;
-  cursor: pointer;
-}
-.book-notes-add {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--fg-faint);
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  letter-spacing: 0.04em;
-}
-.book-notes-add:hover { color: var(--teal); }
 
 @media (max-width: 600px) {
   .rl-top { flex-direction: column; gap: 1rem; }
@@ -544,12 +499,7 @@ function cardHTML(b) {
     </div>
     <div class="book-detail" id="detail-${b.id}">
       ${b.why ? `<p class="book-why">${b.why}</p>` : ""}
-      ${b.status === "finished" ? `
-        <div class="book-notes-label">Notes & takeaways</div>
-        ${b.notes
-          ? `<p class="book-notes" data-edit-notes="${b.id}" style="cursor:pointer" title="Click to edit">${b.notes}</p>`
-          : `<button class="book-notes-add" data-add-notes="${b.id}">+ add notes</button>`
-        }` : ""}
+      ${b.notes ? `<p class="book-notes">${b.notes}</p>` : ""}
     </div>
   </div>`;
 }
@@ -571,7 +521,7 @@ function renderList() {
 document.getElementById("rl-list").addEventListener("click", e => {
   // Expand/collapse
   const toggle = e.target.closest("[data-toggle]");
-  if (toggle && !e.target.closest("[data-cycle]") && !e.target.closest(".star") && !e.target.closest("[data-edit-notes]") && !e.target.closest("[data-add-notes]")) {
+  if (toggle && !e.target.closest("[data-cycle]") && !e.target.closest(".star")) {
     const id = toggle.dataset.toggle;
     const detail = document.getElementById(`detail-${id}`);
     const btn = document.querySelector(`button.book-toggle[data-toggle="${id}"]`);
@@ -607,55 +557,7 @@ document.getElementById("rl-list").addEventListener("click", e => {
     return;
   }
 
-  // Edit notes
-  const editNotes = e.target.closest("[data-edit-notes]");
-  if (editNotes) {
-    e.stopPropagation();
-    const b = getBook(editNotes.dataset.editNotes);
-    if (!b) return;
-    editNotes.outerHTML = notesEditorHTML(b);
-    return;
-  }
-
-  // Add notes
-  const addNotes = e.target.closest("[data-add-notes]");
-  if (addNotes) {
-    e.stopPropagation();
-    const b = getBook(addNotes.dataset.addNotes);
-    if (!b) return;
-    addNotes.outerHTML = notesEditorHTML(b);
-    return;
-  }
-
-  // Save notes
-  const saveNotes = e.target.closest("[data-save-notes]");
-  if (saveNotes) {
-    e.stopPropagation();
-    const id = saveNotes.dataset.saveNotes;
-    const b = getBook(id);
-    const textarea = document.querySelector(`textarea[data-notes-input="${id}"]`);
-    if (!b || !textarea) return;
-    const notes = textarea.value.trim() || null;
-    updateBook({...b, notes});
-    const detail = document.getElementById(`detail-${id}`);
-    const notesArea = detail.querySelector(".book-notes, .book-notes-add, textarea, [data-save-notes]").closest(".book-notes, .book-notes-add") || detail;
-    // Re-render just the notes section
-    const wrapper = saveNotes.closest(".notes-editor-wrap");
-    if (wrapper) {
-      wrapper.outerHTML = notes
-        ? `<p class="book-notes" data-edit-notes="${id}" style="cursor:pointer" title="Click to edit">${notes}</p>`
-        : `<button class="book-notes-add" data-add-notes="${id}">+ add notes</button>`;
-    }
-    return;
-  }
 });
-
-function notesEditorHTML(b) {
-  return `<div class="notes-editor-wrap">
-    <textarea class="book-notes-input" data-notes-input="${b.id}" rows="3">${b.notes || ""}</textarea>
-    <button class="book-notes-save" data-save-notes="${b.id}">Save</button>
-  </div>`;
-}
 
 // ── Init ───────────────────────────────────────────────
 loadBooks();
