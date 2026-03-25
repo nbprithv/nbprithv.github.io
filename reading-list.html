@@ -1,0 +1,666 @@
+---
+layout: default
+title: Reading List
+permalink: /reading-list/
+---
+
+<style>
+.rl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.rl-subtitle {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  margin-top: 0.25rem;
+  font-weight: 300;
+}
+.rl-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.rl-stat {
+  text-align: right;
+}
+.rl-stat-val {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+.rl-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-top: 2px;
+}
+
+/* Filters */
+.rl-filters { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.rl-filter-group { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.rl-filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.rl-filter-btn:hover { background: var(--bg-surface); color: var(--fg); }
+.rl-filter-btn.active {
+  background: var(--bg-card);
+  color: var(--fg);
+  border-color: var(--border-mid);
+}
+
+/* Mood picker */
+.mood-section { margin-bottom: 1.5rem; }
+.mood-trigger {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--teal);
+  background: none;
+  border: 0.5px solid var(--teal-border);
+  border-radius: var(--radius-sm);
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.mood-trigger:hover { background: var(--teal-light); }
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.mood-card {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  text-align: left;
+}
+.mood-card:hover { background: var(--bg-card); border-color: var(--border-mid); }
+.mood-icon { font-size: 1rem; margin-bottom: 4px; }
+.mood-name { font-size: 0.82rem; font-weight: 500; color: var(--fg); }
+.mood-desc { font-family: var(--font-mono); font-size: 0.62rem; color: var(--fg-faint); margin-top: 2px; }
+.mood-rec {
+  background: var(--teal-light);
+  border: 0.5px solid var(--teal-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-top: 0.75rem;
+}
+.mood-rec-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.mood-rec-title { font-family: var(--font-serif); font-size: 1.1rem; color: var(--fg); margin-bottom: 2px; }
+.mood-rec-author { font-size: 0.8rem; color: var(--fg-muted); margin-bottom: 8px; }
+.mood-rec-why { font-size: 0.82rem; color: var(--fg); line-height: 1.6; font-weight: 300; }
+.mood-dismiss {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--teal); margin-top: 10px; padding: 0;
+}
+
+/* Book list */
+.rl-list { display: flex; flex-direction: column; gap: 0; }
+.rl-empty {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--fg-faint);
+  text-align: center;
+  padding: 3rem 0;
+  letter-spacing: 0.06em;
+}
+
+/* Book card */
+.book-card {
+  border-bottom: 0.5px solid var(--border);
+  padding: 14px 0;
+}
+.book-card:first-child { border-top: 0.5px solid var(--border); }
+.book-card-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  cursor: pointer;
+}
+.book-left { flex: 1; min-width: 0; }
+.book-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 5px; }
+.book-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 0.5px solid;
+  white-space: nowrap;
+}
+.book-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-bottom: 2px;
+}
+.book-author { font-size: 0.8rem; color: var(--fg-muted); font-weight: 300; }
+.book-meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fg-faint);
+  letter-spacing: 0.04em;
+  margin-top: 6px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.book-toggle {
+  background: none; border: none; cursor: pointer;
+  color: var(--fg-faint); font-size: 0.7rem; padding: 2px; flex-shrink: 0;
+  transition: color 0.15s;
+}
+.book-toggle:hover { color: var(--fg); }
+
+/* Stars */
+.book-stars { display: flex; gap: 1px; margin-top: 6px; }
+.star { font-size: 0.9rem; cursor: pointer; transition: color 0.1s; }
+.star.filled { color: var(--amber); }
+.star.empty { color: var(--border-mid); }
+
+/* Expanded detail */
+.book-detail {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border);
+  display: none;
+}
+.book-detail.open { display: block; }
+.book-why {
+  font-size: 0.83rem;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+.book-notes-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 4px;
+}
+.book-notes {
+  font-size: 0.83rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  font-weight: 300;
+}
+.book-notes-input {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 0.83rem;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  padding: 6px 8px;
+  resize: vertical;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+.book-notes-input:focus { outline: none; border-color: var(--fg-faint); }
+.book-notes-save {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.book-notes-add {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--fg-faint);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  letter-spacing: 0.04em;
+}
+.book-notes-add:hover { color: var(--teal); }
+
+@media (max-width: 600px) {
+  .rl-top { flex-direction: column; gap: 1rem; }
+  .rl-stats { flex-direction: row; gap: 1.25rem; }
+  .rl-stat { text-align: left; }
+}
+</style>
+
+<main>
+  <div class="rl-top">
+    <div>
+      <div class="page-title">Reading</div>
+      <p class="rl-subtitle">Books I've read, am reading, or want to read.</p>
+    </div>
+    <div class="rl-stats" id="rl-stats"></div>
+  </div>
+
+  <div class="mood-section">
+    <button class="mood-trigger" id="mood-trigger">◉ What should I read next?</button>
+    <div id="mood-picker" style="display:none">
+      <div class="mood-grid" id="mood-grid"></div>
+      <div id="mood-rec" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="rl-filters">
+    <div class="rl-filter-group" id="status-filters"></div>
+    <div class="rl-filter-group" id="cat-filters"></div>
+  </div>
+
+  <div class="rl-list" id="rl-list"></div>
+</main>
+
+<script>
+const BOOKS = [
+  { id:"1", title:"Poor Charlie's Almanack", author:"Charlie Munger", category:"Finance / Investing", status:"recommended", source:"Acquired Podcast", why:"Mental models from one of the greatest investors — dense, no-fluff, the anti-airport-book.", pages:544, hours:18, rating:null, notes:null, moodFit:["focused","reflective"] },
+  { id:"2", title:"The Snowball", author:"Alice Schroeder", category:"Biography / Memoir", status:"recommended", source:"We Study Billionaires", why:"Buffett's full life story — how compounding applies to relationships and knowledge, not just money.", pages:960, hours:32, rating:null, notes:null, moodFit:["curious","energized"] },
+  { id:"3", title:"The Power Broker", author:"Robert Caro", category:"History / Politics", status:"recommended", source:"Patrick Boyle YouTube", why:"How Robert Moses built and broke New York. The definitive book on power and infrastructure.", pages:1344, hours:45, rating:null, notes:null, moodFit:["focused","curious"] },
+  { id:"4", title:"Sapiens", author:"Yuval Noah Harari", category:"Science / Philosophy", status:"finished", source:"fs.blog", why:"Sweeping history of humanity — narrative but substantive.", pages:443, hours:15, rating:4, notes:"The 'intersubjective reality' framing of money and religion was genuinely new to me.", moodFit:["curious","reflective"] },
+  { id:"5", title:"Zero to One", author:"Peter Thiel", category:"Business / Strategy", status:"finished", source:"Manual", why:"Contrarian thinking about startups and monopolies. Short and punchy.", pages:195, hours:6, rating:5, notes:"The secret question framework changed how I evaluate ideas.", moodFit:["energized","focused"] },
+  { id:"6", title:"The Courage to Be Disliked", author:"Kishimi & Koga", category:"Science / Philosophy", status:"recommended", source:"Tim Ferriss", why:"Adlerian psychology as Socratic dialogue. Surprisingly practical on how to stop seeking approval.", pages:288, hours:10, rating:null, notes:null, moodFit:["reflective","relaxed"] },
+  { id:"7", title:"Thinking in Systems", author:"Donella Meadows", category:"Science / Philosophy", status:"recommended", source:"Invest Like the Best", why:"Essential systems-thinking primer. Highly relevant for engineering org design.", pages:235, hours:8, rating:null, notes:null, moodFit:["focused","reflective"] },
+  { id:"8", title:"The Outsiders", author:"William Thorndike", category:"Business / Strategy", status:"recommended", source:"My First Million podcast", why:"8 contrarian CEOs who massively outperformed the S&P. Capital allocation as competitive advantage.", pages:272, hours:9, rating:null, notes:null, moodFit:["energized","focused"] },
+  { id:"9", title:"Principles", author:"Ray Dalio", category:"Business / Strategy", status:"reading", source:"Manual", why:"Dalio's life and work principles distilled — radical transparency, systematic decision-making.", pages:567, hours:19, rating:null, notes:null, moodFit:["focused","reflective"] },
+  { id:"10", title:"Meditations", author:"Marcus Aurelius (Gregory Hays tr.)", category:"Science / Philosophy", status:"recommended", source:"Ryan Holiday", why:"The private journal of the world's most powerful man on how to lead with humility and virtue.", pages:253, hours:8, rating:null, notes:null, moodFit:["reflective","focused"] },
+  { id:"11", title:"Ego Is the Enemy", author:"Ryan Holiday", category:"Science / Philosophy", status:"recommended", source:"Ryan Holiday", why:"How ego sabotages ambition at every stage — aspiring, succeeding, failing.", pages:256, hours:8, rating:null, notes:null, moodFit:["reflective","energized"] },
+  { id:"12", title:"The Obstacle Is the Way", author:"Ryan Holiday", category:"Science / Philosophy", status:"recommended", source:"Ryan Holiday", why:"Stoic framework for turning adversity into advantage.", pages:224, hours:7, rating:null, notes:null, moodFit:["energized","focused"] },
+  { id:"13", title:"Letters from a Stoic", author:"Seneca", category:"Science / Philosophy", status:"recommended", source:"Ryan Holiday", why:"Seneca on grief, wealth, power — written as direct letters, remarkably readable for 2,000-year-old advice.", pages:256, hours:9, rating:null, notes:null, moodFit:["reflective","relaxed"] },
+  { id:"14", title:"Man's Search for Meaning", author:"Viktor Frankl", category:"Science / Philosophy", status:"recommended", source:"Ryan Holiday", why:"Frankl's account of surviving the Holocaust and his core insight: meaning is chosen, not found.", pages:165, hours:5, rating:null, notes:null, moodFit:["reflective","energized"] },
+  { id:"15", title:"The Black Swan", author:"Nassim Nicholas Taleb", category:"Finance / Investing", status:"recommended", source:"Ryan Holiday", why:"Essential for anyone thinking about risk and uncertainty in investing or system design.", pages:366, hours:12, rating:null, notes:null, moodFit:["focused","curious"] },
+  { id:"16", title:"Rome's Last Citizen", author:"Rob Goodman & Jimmy Soni", category:"Biography / Memoir", status:"recommended", source:"Ryan Holiday", why:"The life of Cato — Stoic senator who stood against Caesar.", pages:384, hours:13, rating:null, notes:null, moodFit:["energized","curious"] },
+  { id:"17", title:"Stillness Is the Key", author:"Ryan Holiday", category:"Science / Philosophy", status:"recommended", source:"Ryan Holiday", why:"On cultivating inner calm as a competitive advantage. Draws on Marcus Aurelius, JFK, Tiger Woods.", pages:288, hours:10, rating:null, notes:null, moodFit:["reflective","relaxed"] },
+  { id:"gr_3", title:"Alchemy", author:"Rory Sutherland", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:387, hours:13, rating:null, notes:null, moodFit:[] },
+  { id:"gr_4", title:"The Accidental Superpower", author:"Peter Zeihan", category:"History / Politics", status:"reading", source:"Goodreads", why:"", pages:409, hours:14, rating:null, notes:null, moodFit:[] },
+  { id:"gr_6", title:"Supercommunicators", author:"Charles Duhigg", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:307, hours:10, rating:null, notes:null, moodFit:[] },
+  { id:"gr_7", title:"The Coming Wave", author:"Mustafa Suleyman", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:512, hours:17, rating:null, notes:null, moodFit:[] },
+  { id:"gr_8", title:"The Status Game", author:"Will Storr", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:437, hours:15, rating:null, notes:null, moodFit:[] },
+  { id:"gr_9", title:"Inside Mercedes F1", author:"Matt Whyman", category:"Biography / Memoir", status:"finished", source:"Goodreads", why:"", pages:341, hours:11, rating:5, notes:null, moodFit:[] },
+  { id:"gr_10", title:"The Book of Beautiful Questions", author:"Warren Berger", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:274, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_11", title:"Be Bad First", author:"Erika Andersen", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:208, hours:7, rating:null, notes:null, moodFit:[] },
+  { id:"gr_13", title:"How to Win Friends and Influence People", author:"Dale Carnegie", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:317, hours:11, rating:null, notes:null, moodFit:[] },
+  { id:"gr_14", title:"The 15 Commitments of Conscious Leadership", author:"Jim Dethmer", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:377, hours:13, rating:null, notes:null, moodFit:[] },
+  { id:"gr_15", title:"Atomic Habits", author:"James Clear", category:"Business / Strategy", status:"finished", source:"Goodreads", why:"", pages:319, hours:11, rating:4, notes:null, moodFit:[] },
+  { id:"gr_16", title:"Thinking in Bets", author:"Annie Duke", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:288, hours:10, rating:null, notes:null, moodFit:[] },
+  { id:"gr_18", title:"Designing Machine Learning Systems", author:"Chip Huyen", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:617, hours:21, rating:null, notes:null, moodFit:[] },
+  { id:"gr_19", title:"Debt: The First 5,000 Years", author:"David Graeber", category:"Science / Philosophy", status:"reading", source:"Goodreads", why:"", pages:542, hours:18, rating:null, notes:null, moodFit:[] },
+  { id:"gr_20", title:"The Song of the Cell", author:"Siddhartha Mukherjee", category:"Science / Philosophy", status:"reading", source:"Goodreads", why:"", pages:484, hours:16, rating:null, notes:null, moodFit:[] },
+  { id:"gr_22", title:"Why Empires Fall", author:"Peter Heather", category:"History / Politics", status:"reading", source:"Goodreads", why:"", pages:200, hours:7, rating:null, notes:null, moodFit:[] },
+  { id:"gr_24", title:"Elon Musk", author:"Walter Isaacson", category:"Biography / Memoir", status:"finished", source:"Goodreads", why:"", pages:670, hours:22, rating:5, notes:null, moodFit:[] },
+  { id:"gr_26", title:"Think Again", author:"Adam M. Grant", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:319, hours:11, rating:5, notes:null, moodFit:[] },
+  { id:"gr_27", title:"Steve Jobs", author:"Walter Isaacson", category:"Biography / Memoir", status:"finished", source:"Goodreads", why:"", pages:656, hours:22, rating:5, notes:null, moodFit:[] },
+  { id:"gr_28", title:"Thirteen Days in September", author:"Lawrence Wright", category:"History / Politics", status:"finished", source:"Goodreads", why:"", pages:369, hours:12, rating:5, notes:null, moodFit:[] },
+  { id:"gr_29", title:"Scaling People", author:"Claire Hughes Johnson", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:609, hours:20, rating:null, notes:null, moodFit:[] },
+  { id:"gr_30", title:"The 48 Laws of Power", author:"Robert Greene", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:452, hours:15, rating:null, notes:null, moodFit:[] },
+  { id:"gr_31", title:"Predictably Irrational", author:"Dan Ariely", category:"Science / Philosophy", status:"reading", source:"Goodreads", why:"", pages:382, hours:13, rating:null, notes:null, moodFit:[] },
+  { id:"gr_32", title:"Good Strategy Bad Strategy", author:"Richard P. Rumelt", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:338, hours:11, rating:null, notes:null, moodFit:[] },
+  { id:"gr_33", title:"Principles for Dealing with the Changing World Order", author:"Ray Dalio", category:"Finance / Investing", status:"reading", source:"Goodreads", why:"", pages:576, hours:19, rating:null, notes:null, moodFit:[] },
+  { id:"gr_34", title:"Turn the Ship Around!", author:"L. David Marquet", category:"Business / Strategy", status:"reading", source:"Goodreads", why:"", pages:273, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_36", title:"The Psychology of Money", author:"Morgan Housel", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:224, hours:7, rating:4, notes:null, moodFit:[] },
+  { id:"gr_37", title:"The Making of a Manager", author:"Julie Zhuo", category:"Business / Strategy", status:"finished", source:"Goodreads", why:"", pages:336, hours:11, rating:3, notes:null, moodFit:[] },
+  { id:"gr_38", title:"Radical Candor", author:"Kim Malone Scott", category:"Business / Strategy", status:"finished", source:"Goodreads", why:"", pages:272, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_39", title:"Storyworthy", author:"Matthew Dicks", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:368, hours:12, rating:null, notes:null, moodFit:[] },
+  { id:"gr_41", title:"Homo Deus", author:"Yuval Noah Harari", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:455, hours:15, rating:4, notes:null, moodFit:[] },
+  { id:"gr_42", title:"Me Talk Pretty One Day", author:"David Sedaris", category:"Biography / Memoir", status:"finished", source:"Goodreads", why:"", pages:300, hours:10, rating:4, notes:null, moodFit:[] },
+  { id:"gr_43", title:"No Rules Rules", author:"Reed Hastings", category:"Business / Strategy", status:"finished", source:"Goodreads", why:"", pages:320, hours:11, rating:4, notes:null, moodFit:[] },
+  { id:"gr_44", title:"It Doesn't Have to Be Crazy at Work", author:"Jason Fried", category:"Business / Strategy", status:"finished", source:"Goodreads", why:"", pages:227, hours:8, rating:4, notes:null, moodFit:[] },
+  { id:"gr_45", title:"Influence: The Psychology of Persuasion", author:"Robert B. Cialdini", category:"Business / Strategy", status:"recommended", source:"Goodreads", why:"", pages:320, hours:11, rating:null, notes:null, moodFit:[] },
+  { id:"gr_46", title:"Start with Why", author:"Simon Sinek", category:"Business / Strategy", status:"recommended", source:"Goodreads", why:"", pages:256, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_47", title:"The Culture Map", author:"Erin Meyer", category:"Business / Strategy", status:"recommended", source:"Goodreads", why:"", pages:274, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_48", title:"First, Break All the Rules", author:"Gallup Press", category:"Business / Strategy", status:"recommended", source:"Goodreads", why:"", pages:384, hours:13, rating:null, notes:null, moodFit:[] },
+  { id:"gr_49", title:"Never Split the Difference", author:"Chris Voss", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:274, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_50", title:"Apocalypse Never", author:"Michael Shellenberger", category:"History / Politics", status:"recommended", source:"Goodreads", why:"", pages:272, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_51", title:"The Master Switch", author:"Tim Wu", category:"History / Politics", status:"recommended", source:"Goodreads", why:"", pages:384, hours:13, rating:null, notes:null, moodFit:[] },
+  { id:"gr_52", title:"The Spy and the Traitor", author:"Ben Macintyre", category:"History / Politics", status:"recommended", source:"Goodreads", why:"", pages:384, hours:13, rating:null, notes:null, moodFit:[] },
+  { id:"gr_55", title:"12 Rules for Life", author:"Jordan B. Peterson", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:409, hours:14, rating:null, notes:null, moodFit:[] },
+  { id:"gr_56", title:"Three Ordinary Girls", author:"Tim Brady", category:"History / Politics", status:"recommended", source:"Goodreads", why:"", pages:336, hours:11, rating:null, notes:null, moodFit:[] },
+  { id:"gr_57", title:"Weapons of Math Destruction", author:"Cathy O'Neil", category:"History / Politics", status:"recommended", source:"Goodreads", why:"", pages:254, hours:8, rating:null, notes:null, moodFit:[] },
+  { id:"gr_59", title:"How to Avoid a Climate Disaster", author:"Bill Gates", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:288, hours:10, rating:4, notes:null, moodFit:[] },
+  { id:"gr_60", title:"Ikigai", author:"Héctor García", category:"Science / Philosophy", status:"reading", source:"Goodreads", why:"", pages:204, hours:7, rating:null, notes:null, moodFit:[] },
+  { id:"gr_61", title:"The Lost City of the Monkey God", author:"Douglas Preston", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:326, hours:11, rating:4, notes:null, moodFit:[] },
+  { id:"gr_62", title:"The Code Book", author:"Simon Singh", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:432, hours:14, rating:4, notes:null, moodFit:[] },
+  { id:"gr_102", title:"The Dragons of Eden", author:"Carl Sagan", category:"Science / Philosophy", status:"recommended", source:"Goodreads", why:"", pages:271, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_104", title:"Hooked", author:"Nir Eyal", category:"Business / Strategy", status:"recommended", source:"Goodreads", why:"", pages:256, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_105", title:"The Subtle Art of Not Giving a F*ck", author:"Mark Manson", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:212, hours:7, rating:3, notes:null, moodFit:[] },
+  { id:"gr_107", title:"Sapiens: A Brief History of Humankind", author:"Yuval Noah Harari", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:512, hours:17, rating:4, notes:null, moodFit:[] },
+  { id:"gr_108", title:"Modern Romance", author:"Aziz Ansari", category:"Biography / Memoir", status:"finished", source:"Goodreads", why:"", pages:279, hours:9, rating:4, notes:null, moodFit:[] },
+  { id:"gr_109", title:"The Rational Optimist", author:"Matt Ridley", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:448, hours:15, rating:4, notes:null, moodFit:[] },
+  { id:"gr_110", title:"Born to Run", author:"Christopher McDougall", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:287, hours:10, rating:4, notes:null, moodFit:[] },
+  { id:"gr_111", title:"Zero to One (Goodreads)", author:"Peter Thiel", category:"Finance / Investing", status:"finished", source:"Goodreads", why:"", pages:195, hours:6, rating:4, notes:null, moodFit:[] },
+  { id:"gr_112", title:"Mossad", author:"Michael Bar-Zohar", category:"Biography / Memoir", status:"finished", source:"Goodreads", why:"", pages:388, hours:13, rating:5, notes:null, moodFit:[] },
+  { id:"gr_113", title:"Fear: Trump in the White House", author:"Bob Woodward", category:"History / Politics", status:"finished", source:"Goodreads", why:"", pages:357, hours:12, rating:4, notes:null, moodFit:[] },
+  { id:"gr_114", title:"The Happiness Advantage", author:"Shawn Achor", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:258, hours:9, rating:4, notes:null, moodFit:[] },
+  { id:"gr_115", title:"The Beginning of Infinity", author:"David Deutsch", category:"Science / Philosophy", status:"finished", source:"Goodreads", why:"", pages:487, hours:16, rating:null, notes:null, moodFit:[] },
+  { id:"gr_116", title:"Extreme Ownership", author:"Jocko Willink", category:"Biography / Memoir", status:"finished", source:"Goodreads", why:"", pages:322, hours:11, rating:5, notes:null, moodFit:[] },
+  { id:"gr_117", title:"Play Bigger", author:"Al Ramadan", category:"Finance / Investing", status:"finished", source:"Goodreads", why:"", pages:272, hours:9, rating:null, notes:null, moodFit:[] },
+  { id:"gr_118", title:"A Brief History of Seven Killings", author:"Marlon James", category:"History / Politics", status:"recommended", source:"Goodreads", why:"", pages:688, hours:23, rating:null, notes:null, moodFit:[] },
+];
+
+const CATEGORIES = ["All","Business / Strategy","Finance / Investing","Biography / Memoir","History / Politics","Science / Philosophy"];
+const STATUSES   = ["All","recommended","want to read","reading","finished"];
+
+const MOODS = [
+  { id:"focused",    label:"Focused",    icon:"◎", desc:"Building expertise" },
+  { id:"curious",    label:"Curious",    icon:"◈", desc:"Exploring new areas" },
+  { id:"relaxed",    label:"Relaxed",    icon:"◇", desc:"Story-driven, narrative" },
+  { id:"energized",  label:"Energized",  icon:"◆", desc:"Ambitious, inspiring" },
+  { id:"reflective", label:"Reflective", icon:"◉", desc:"Philosophy, meaning" },
+];
+
+const CAT_STYLE = {
+  "Business / Strategy":  { bg:"#EAF3DE", text:"#3B6D11", border:"#C0DD97" },
+  "Finance / Investing":  { bg:"#E6F1FB", text:"#185FA5", border:"#B5D4F4" },
+  "Biography / Memoir":   { bg:"#FAEEDA", text:"#854F0B", border:"#FAC775" },
+  "History / Politics":   { bg:"#FAECE7", text:"#993C1D", border:"#F5C4B3" },
+  "Science / Philosophy": { bg:"#EEEDFE", text:"#534AB7", border:"#CECBF6" },
+};
+const STATUS_STYLE = {
+  "recommended":  { bg:"#FAEEDA", text:"#854F0B", dot:"#EF9F27" },
+  "want to read": { bg:"#F1EFE8", text:"#5F5E5A", dot:"#888780" },
+  "reading":      { bg:"#E6F1FB", text:"#185FA5", dot:"#378ADD" },
+  "finished":     { bg:"#EAF3DE", text:"#3B6D11", dot:"#639922" },
+};
+const STATUS_ORDER = ["recommended","want to read","reading","finished"];
+
+// ── State ─────────────────────────────────────────────
+const STORAGE_KEY = "nbp-reading-list-v1";
+let books = [];
+let catFilter = "All";
+let statusFilter = "All";
+let moodOpen = false;
+let activeMood = null;
+
+function loadBooks() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if (saved) {
+      const ids = new Set(saved.map(b => b.id));
+      const missing = BOOKS.filter(b => !ids.has(b.id));
+      books = [...saved, ...missing];
+    } else {
+      books = BOOKS.map(b => ({...b}));
+    }
+  } catch { books = BOOKS.map(b => ({...b})); }
+}
+function saveBooks() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(books)); } catch {}
+}
+function getBook(id) { return books.find(b => b.id === id); }
+function updateBook(updated) {
+  books = books.map(b => b.id === updated.id ? updated : b);
+  saveBooks();
+}
+
+// ── Stats ──────────────────────────────────────────────
+function renderStats() {
+  const finished = books.filter(b => b.status === "finished");
+  const statsEl = document.getElementById("rl-stats");
+  statsEl.innerHTML = [
+    [books.length, "Books"],
+    [books.filter(b => b.status === "reading").length, "Reading"],
+    [finished.length, "Finished"],
+    [finished.reduce((s,b) => s + b.hours, 0) + "h", "Read"],
+  ].map(([v,l]) => `<div class="rl-stat"><div class="rl-stat-val">${v}</div><div class="rl-stat-label">${l}</div></div>`).join("");
+}
+
+// ── Filters ────────────────────────────────────────────
+function renderFilters() {
+  document.getElementById("status-filters").innerHTML =
+    STATUSES.map(s => `<button class="rl-filter-btn${statusFilter===s?" active":""}" data-type="status" data-val="${s}">${s}</button>`).join("");
+  document.getElementById("cat-filters").innerHTML =
+    CATEGORIES.map(c => `<button class="rl-filter-btn${catFilter===c?" active":""}" data-type="cat" data-val="${c}">${c}</button>`).join("");
+}
+
+document.getElementById("status-filters").addEventListener("click", e => {
+  const btn = e.target.closest(".rl-filter-btn");
+  if (!btn) return;
+  statusFilter = btn.dataset.val;
+  renderFilters();
+  renderList();
+});
+document.getElementById("cat-filters").addEventListener("click", e => {
+  const btn = e.target.closest(".rl-filter-btn");
+  if (!btn) return;
+  catFilter = btn.dataset.val;
+  renderFilters();
+  renderList();
+});
+
+// ── Mood ───────────────────────────────────────────────
+function renderMoodPicker() {
+  const picker = document.getElementById("mood-picker");
+  picker.style.display = moodOpen ? "block" : "none";
+  if (!moodOpen) return;
+
+  if (activeMood) {
+    document.getElementById("mood-grid").innerHTML = "";
+    const rec = document.getElementById("mood-rec");
+    const candidates = books.filter(b => (b.status === "want to read" || b.status === "recommended") && b.moodFit?.includes(activeMood.id));
+    const pick = candidates[0] || books.find(b => b.status === "want to read" || b.status === "recommended");
+    if (pick) {
+      const cs = CAT_STYLE[pick.category] || {};
+      rec.style.display = "block";
+      rec.innerHTML = `
+        <div class="mood-rec">
+          <div class="mood-rec-label">${activeMood.icon} recommended for ${activeMood.label.toLowerCase()} mood</div>
+          <span class="book-badge" style="background:${cs.bg};color:${cs.text};border-color:${cs.border}">${pick.category}</span>
+          <div class="mood-rec-title" style="margin-top:8px">${pick.title}</div>
+          <div class="mood-rec-author">${pick.author}</div>
+          ${pick.why ? `<div class="mood-rec-why">${pick.why}</div>` : ""}
+          <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--teal);margin-top:8px">~${pick.hours}h · ${pick.pages}p</div>
+          <button class="mood-dismiss" onclick="activeMood=null;renderMoodPicker()">← pick a different mood</button>
+        </div>`;
+    }
+  } else {
+    document.getElementById("mood-rec").style.display = "none";
+    document.getElementById("mood-grid").innerHTML = MOODS.map(m =>
+      `<button class="mood-card" data-mood="${m.id}">
+        <div class="mood-icon">${m.icon}</div>
+        <div class="mood-name">${m.label}</div>
+        <div class="mood-desc">${m.desc}</div>
+      </button>`
+    ).join("");
+  }
+}
+
+document.getElementById("mood-trigger").addEventListener("click", () => {
+  moodOpen = !moodOpen;
+  if (!moodOpen) activeMood = null;
+  renderMoodPicker();
+});
+document.getElementById("mood-grid").addEventListener("click", e => {
+  const card = e.target.closest(".mood-card");
+  if (!card) return;
+  activeMood = MOODS.find(m => m.id === card.dataset.mood);
+  renderMoodPicker();
+});
+
+// ── Book list ──────────────────────────────────────────
+function starsHTML(rating, id) {
+  return [1,2,3,4,5].map(n =>
+    `<span class="star ${n <= (rating||0) ? "filled" : "empty"}" data-star="${n}" data-id="${id}">★</span>`
+  ).join("");
+}
+
+function cardHTML(b) {
+  const cs = CAT_STYLE[b.category] || {};
+  const ss = STATUS_STYLE[b.status] || {};
+  return `
+  <div class="book-card" id="card-${b.id}">
+    <div class="book-card-main" data-toggle="${b.id}">
+      <div class="book-left">
+        <div class="book-badges">
+          <span class="book-badge" style="background:${cs.bg};color:${cs.text};border-color:${cs.border}">${b.category}</span>
+          <span class="book-badge" style="background:${ss.bg};color:${ss.text};border-color:${ss.dot};cursor:pointer" data-cycle="${b.id}">
+            <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:${ss.dot};margin-right:4px;vertical-align:middle"></span>${b.status}
+          </span>
+        </div>
+        <div class="book-title">${b.title}</div>
+        <div class="book-author">${b.author}</div>
+        <div class="book-meta">
+          <span>~${b.hours}h</span><span>${b.pages}p</span>${b.source ? `<span>${b.source}</span>` : ""}
+        </div>
+        ${b.status === "finished" ? `<div class="book-stars">${starsHTML(b.rating, b.id)}</div>` : ""}
+      </div>
+      <button class="book-toggle" data-toggle="${b.id}">▼</button>
+    </div>
+    <div class="book-detail" id="detail-${b.id}">
+      ${b.why ? `<p class="book-why">${b.why}</p>` : ""}
+      ${b.status === "finished" ? `
+        <div class="book-notes-label">Notes & takeaways</div>
+        ${b.notes
+          ? `<p class="book-notes" data-edit-notes="${b.id}" style="cursor:pointer" title="Click to edit">${b.notes}</p>`
+          : `<button class="book-notes-add" data-add-notes="${b.id}">+ add notes</button>`
+        }` : ""}
+    </div>
+  </div>`;
+}
+
+function renderList() {
+  const visible = books.filter(b =>
+    (catFilter === "All" || b.category === catFilter) &&
+    (statusFilter === "All" || b.status === statusFilter)
+  );
+  const el = document.getElementById("rl-list");
+  if (visible.length === 0) {
+    el.innerHTML = `<div class="rl-empty">No books match this filter.</div>`;
+    return;
+  }
+  el.innerHTML = visible.map(cardHTML).join("");
+}
+
+// ── Events on book list (delegated) ───────────────────
+document.getElementById("rl-list").addEventListener("click", e => {
+  // Expand/collapse
+  const toggle = e.target.closest("[data-toggle]");
+  if (toggle && !e.target.closest("[data-cycle]") && !e.target.closest(".star") && !e.target.closest("[data-edit-notes]") && !e.target.closest("[data-add-notes]")) {
+    const id = toggle.dataset.toggle;
+    const detail = document.getElementById(`detail-${id}`);
+    const btn = document.querySelector(`button.book-toggle[data-toggle="${id}"]`);
+    if (detail) {
+      const open = detail.classList.toggle("open");
+      if (btn) btn.textContent = open ? "▲" : "▼";
+    }
+    return;
+  }
+
+  // Cycle status
+  const cycle = e.target.closest("[data-cycle]");
+  if (cycle) {
+    e.stopPropagation();
+    const b = getBook(cycle.dataset.cycle);
+    if (!b) return;
+    const next = STATUS_ORDER[(STATUS_ORDER.indexOf(b.status) + 1) % STATUS_ORDER.length];
+    updateBook({...b, status: next});
+    renderStats();
+    renderList();
+    return;
+  }
+
+  // Star rating
+  const star = e.target.closest(".star");
+  if (star) {
+    e.stopPropagation();
+    const b = getBook(star.dataset.id);
+    if (!b) return;
+    updateBook({...b, rating: parseInt(star.dataset.star)});
+    const starsEl = document.querySelector(`#card-${b.id} .book-stars`);
+    if (starsEl) starsEl.innerHTML = starsHTML(parseInt(star.dataset.star), b.id);
+    return;
+  }
+
+  // Edit notes
+  const editNotes = e.target.closest("[data-edit-notes]");
+  if (editNotes) {
+    e.stopPropagation();
+    const b = getBook(editNotes.dataset.editNotes);
+    if (!b) return;
+    editNotes.outerHTML = notesEditorHTML(b);
+    return;
+  }
+
+  // Add notes
+  const addNotes = e.target.closest("[data-add-notes]");
+  if (addNotes) {
+    e.stopPropagation();
+    const b = getBook(addNotes.dataset.addNotes);
+    if (!b) return;
+    addNotes.outerHTML = notesEditorHTML(b);
+    return;
+  }
+
+  // Save notes
+  const saveNotes = e.target.closest("[data-save-notes]");
+  if (saveNotes) {
+    e.stopPropagation();
+    const id = saveNotes.dataset.saveNotes;
+    const b = getBook(id);
+    const textarea = document.querySelector(`textarea[data-notes-input="${id}"]`);
+    if (!b || !textarea) return;
+    const notes = textarea.value.trim() || null;
+    updateBook({...b, notes});
+    const detail = document.getElementById(`detail-${id}`);
+    const notesArea = detail.querySelector(".book-notes, .book-notes-add, textarea, [data-save-notes]").closest(".book-notes, .book-notes-add") || detail;
+    // Re-render just the notes section
+    const wrapper = saveNotes.closest(".notes-editor-wrap");
+    if (wrapper) {
+      wrapper.outerHTML = notes
+        ? `<p class="book-notes" data-edit-notes="${id}" style="cursor:pointer" title="Click to edit">${notes}</p>`
+        : `<button class="book-notes-add" data-add-notes="${id}">+ add notes</button>`;
+    }
+    return;
+  }
+});
+
+function notesEditorHTML(b) {
+  return `<div class="notes-editor-wrap">
+    <textarea class="book-notes-input" data-notes-input="${b.id}" rows="3">${b.notes || ""}</textarea>
+    <button class="book-notes-save" data-save-notes="${b.id}">Save</button>
+  </div>`;
+}
+
+// ── Init ───────────────────────────────────────────────
+loadBooks();
+renderStats();
+renderFilters();
+renderMoodPicker();
+renderList();
+</script>
