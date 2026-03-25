@@ -426,48 +426,85 @@ time {
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  border-left: 1.5px solid var(--border-mid);
-  margin-left: 6px;
+  gap: 2rem;
 }
-.tl-item {
+
+/* Company block */
+.tl-company {
   display: flex;
-  gap: 1.25rem;
-  position: relative;
-  padding: 0 0 2rem 1.5rem;
+  flex-direction: column;
+  gap: 0;
 }
-.tl-item:last-child { padding-bottom: 0; }
-.tl-marker {
-  position: absolute;
-  left: -5px;
-  top: 5px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--teal);
-  border: 2px solid var(--bg);
-  flex-shrink: 0;
+.tl-company-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.875rem;
 }
-.tl-body { display: flex; flex-direction: column; gap: 3px; }
-.tl-meta {
+.tl-company-name {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+.tl-company-tenure {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--fg-faint);
+  margin-left: auto;
+}
+.tl-company-line {
+  flex: 1;
+  height: 0.5px;
+  background: var(--border);
+}
+
+/* Role rows within a company */
+.tl-roles {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 1.5px solid var(--border-mid);
+  margin-left: 4px;
+}
+.tl-item {
+  position: relative;
+  padding: 0.75rem 0 0.75rem 1.25rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.tl-item:last-child { border-bottom: none; }
+.tl-marker {
+  position: absolute;
+  left: -4.5px;
+  top: 1.1rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 1.5px solid var(--bg);
+}
+.tl-dates {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 3px;
 }
 .tl-role {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--fg);
   line-height: 1.4;
+  margin-bottom: 4px;
 }
 .tl-summary {
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   color: var(--fg-muted);
   line-height: 1.65;
   font-weight: 300;
-  margin-top: 2px;
 }
 
 /* ─── 404 ─── */
