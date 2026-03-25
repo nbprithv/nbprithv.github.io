@@ -210,6 +210,42 @@ main { flex: 1; max-width: 680px; padding: 3rem 2.5rem 4rem; }
   color: var(--teal);
 }
 
+/* ─── Stat pills ─── */
+.stat-pills {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 2rem 0 0;
+}
+.stat-pill {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-left: 2px solid var(--teal);
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  min-width: 130px;
+  flex: 1;
+  max-width: 180px;
+}
+.stat-num {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  line-height: 1;
+  display: block;
+  margin-bottom: 6px;
+}
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  line-height: 1.5;
+  display: block;
+}
+
 /* ─── Expertise ─── */
 .expertise {
   display: flex;
