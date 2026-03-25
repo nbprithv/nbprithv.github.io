@@ -46,6 +46,37 @@ permalink: /bookshelf/
 /* Filters */
 .rl-filters { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
 .rl-filter-group { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.author-search-wrap { position: relative; }
+.author-search {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  padding: 5px 28px 5px 10px;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.author-search::placeholder { color: var(--fg-faint); }
+.author-search:focus { border-color: var(--teal); }
+.author-search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--fg-faint);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  display: none;
+  line-height: 1;
+}
+.author-search-clear.visible { display: block; }
+.author-search-clear:hover { color: var(--fg); }
 .rl-filter-btn {
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -239,6 +270,12 @@ permalink: /bookshelf/
   <div class="rl-filters">
     <div class="rl-filter-group" id="status-filters"></div>
     <div class="rl-filter-group" id="cat-filters"></div>
+    <div class="rl-filter-group">
+      <div class="author-search-wrap">
+        <input class="author-search" id="author-search" type="text" placeholder="Search by author…" autocomplete="off">
+        <button class="author-search-clear" id="author-search-clear" aria-label="Clear">✕</button>
+      </div>
+    </div>
   </div>
 
   <div class="rl-list" id="rl-list"></div>
@@ -399,6 +436,7 @@ const STORAGE_KEY = "nbp-reading-list-v1";
 let books = [];
 let catFilter = "All";
 let statusFilter = "All";
+let authorQuery = "";
 let moodOpen = false;
 let activeMood = null;
 
@@ -455,6 +493,20 @@ document.getElementById("cat-filters").addEventListener("click", e => {
   if (!btn) return;
   catFilter = btn.dataset.val;
   renderFilters();
+  renderList();
+});
+
+const authorInput = document.getElementById("author-search");
+const authorClear = document.getElementById("author-search-clear");
+authorInput.addEventListener("input", () => {
+  authorQuery = authorInput.value.trim();
+  authorClear.classList.toggle("visible", authorQuery.length > 0);
+  renderList();
+});
+authorClear.addEventListener("click", () => {
+  authorQuery = "";
+  authorInput.value = "";
+  authorClear.classList.remove("visible");
   renderList();
 });
 
@@ -544,9 +596,11 @@ function cardHTML(b) {
 }
 
 function renderList() {
+  const q = authorQuery.toLowerCase();
   const visible = books.filter(b =>
     (catFilter === "All" || b.category === catFilter) &&
-    (statusFilter === "All" || b.status === statusFilter)
+    (statusFilter === "All" || b.status === statusFilter) &&
+    (!q || b.author.toLowerCase().includes(q))
   );
   const el = document.getElementById("rl-list");
   if (visible.length === 0) {
