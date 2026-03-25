@@ -216,6 +216,26 @@ main { flex: 1; max-width: 780px; margin: 0 auto; width: 100%; padding: 3rem 2re
   color: var(--teal);
 }
 
+/* ─── Expertise ─── */
+.expertise {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  flex-wrap: wrap;
+}
+.expertise-item {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.expertise-sep {
+  color: var(--border-mid);
+  font-size: 0.7rem;
+}
+
 /* ─── Divider ─── */
 .divider {
   height: 0.5px;
