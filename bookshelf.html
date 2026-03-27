@@ -5,158 +5,210 @@ permalink: /bookshelf/
 ---
 
 <style>
-.rl-top {
+/* ── Badge color tokens ───────────────────────── */
+:root {
+  --s-rec-bg: #FAEEDA;  --s-rec-text: #854F0B;  --s-rec-border: #FAC775;
+  --s-want-bg: #F1EFE8; --s-want-text: #5F5E5A; --s-want-border: #D3D1C7;
+  --s-read-bg: #E6F1FB; --s-read-text: #185FA5; --s-read-border: #B5D4F4;
+  --s-fin-bg: #EAF3DE;  --s-fin-text: #3B6D11;  --s-fin-border: #C0DD97;
+}
+[data-theme="dark"] {
+  --s-rec-bg: #2E1E06;  --s-rec-text: #E8AC50;  --s-rec-border: #6E4010;
+  --s-want-bg: #1E1E1B; --s-want-text: #7A7870; --s-want-border: #333330;
+  --s-read-bg: #071428; --s-read-text: #6EA8D8; --s-read-border: #1A3A60;
+  --s-fin-bg: #0E1C06;  --s-fin-text: #6AAC38;  --s-fin-border: #204810;
+}
+
+/* ── Page header ─────────────────────────────── */
+.bs-header { margin-bottom: 1.75rem; }
+.bs-title-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  align-items: baseline;
+  margin-bottom: 1rem;
 }
-.rl-subtitle {
-  font-size: 0.85rem;
-  color: var(--fg-muted);
-  margin-top: 0.25rem;
+.bs-subtitle {
+  font-size: 0.8rem;
+  color: var(--fg-faint);
   font-weight: 300;
-}
-.rl-stats {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.rl-stat {
-  text-align: right;
-}
-.rl-stat-val {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  line-height: 1;
-  color: var(--fg);
-  letter-spacing: -0.02em;
-}
-.rl-stat-label {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+.bs-stats { display: flex; gap: 1.25rem; }
+.bs-stat { display: flex; flex-direction: column; }
+.bs-stat-val {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+.bs-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg-faint);
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
-/* Filters */
-.rl-filters { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-.rl-filter-group { display: flex; gap: 0.25rem; flex-wrap: wrap; }
-.author-search-wrap { position: relative; }
-.author-search {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
+/* ── Mood strip ──────────────────────────────── */
+.bs-mood-strip {
   background: var(--bg-surface);
-  border: 0.5px solid var(--border-mid);
-  border-radius: var(--radius-sm);
-  color: var(--fg);
-  padding: 5px 28px 5px 10px;
-  width: 200px;
-  outline: none;
-  transition: border-color 0.15s;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  overflow: hidden;
 }
-.author-search::placeholder { color: var(--fg-faint); }
-.author-search:focus { border-color: var(--teal); }
-.author-search-clear {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
+.bs-mood-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem 1rem;
   background: none;
   border: none;
-  color: var(--fg-faint);
   cursor: pointer;
-  font-size: 0.75rem;
-  padding: 0;
-  display: none;
-  line-height: 1;
+  text-align: left;
 }
-.author-search-clear.visible { display: block; }
-.author-search-clear:hover { color: var(--fg); }
-.rl-filter-btn {
+.bs-mood-trigger-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+}
+.bs-mood-trigger-text {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
-  padding: 4px 10px;
+  color: var(--teal);
+}
+.bs-mood-trigger-arr {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--fg-faint);
+  transition: transform 0.2s;
+}
+.bs-mood-trigger-arr.open { transform: rotate(90deg); }
+.bs-mood-body {
+  display: none;
+  border-top: 0.5px solid var(--border);
+  padding: 0.75rem 1rem;
+}
+.bs-mood-body.open { display: block; }
+.bs-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.bs-mood-btn {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.4rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.bs-mood-btn:hover, .bs-mood-btn.active {
+  background: var(--bg);
+  border-color: var(--teal-border);
+}
+.bs-mood-btn-icon { font-size: 0.9rem; margin-bottom: 2px; color: var(--fg-muted); }
+.bs-mood-btn-name { font-size: 0.72rem; font-weight: 500; color: var(--fg); display: block; }
+.bs-mood-btn-desc {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--fg-faint);
+  display: block;
+  margin-top: 1px;
+  line-height: 1.3;
+}
+.bs-mood-rec {
+  background: var(--teal-light);
+  border: 0.5px solid var(--teal-border);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  display: none;
+}
+.bs-mood-rec.show { display: block; }
+.bs-mood-rec-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.bs-mood-rec-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+.bs-mood-rec-author { font-size: 0.8rem; color: var(--fg-muted); font-weight: 300; margin-bottom: 6px; }
+.bs-mood-rec-why { font-size: 0.8rem; color: var(--fg-muted); line-height: 1.6; font-weight: 300; }
+.bs-mood-rec-meta { font-family: var(--font-mono); font-size: 0.62rem; color: var(--teal); margin-top: 6px; }
+.bs-mood-reset {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-mono); font-size: 0.65rem;
+  color: var(--teal); margin-top: 8px; padding: 0; display: block;
+}
+
+/* ── Filters ─────────────────────────────────── */
+.bs-filters { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.bs-filter-row {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.bs-filter-row::-webkit-scrollbar { display: none; }
+.bs-filter-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 5px 11px;
   border-radius: 20px;
   border: 0.5px solid var(--border);
   background: transparent;
   color: var(--fg-muted);
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.rl-filter-btn:hover { background: var(--bg-surface); color: var(--fg); }
-.rl-filter-btn.active {
-  background: var(--bg-card);
-  color: var(--fg);
-  border-color: var(--border-mid);
-}
-
-/* Mood picker */
-.mood-section { margin-bottom: 1.5rem; }
-.mood-trigger {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: var(--teal);
-  background: none;
-  border: 0.5px solid var(--teal-border);
-  border-radius: var(--radius-sm);
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.mood-trigger:hover { background: var(--teal-light); }
-.mood-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-.mood-card {
+.bs-filter-pill:hover { background: var(--bg-surface); color: var(--fg); }
+.bs-filter-pill.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.bs-search-wrap { position: relative; flex-shrink: 0; }
+.bs-search {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
   background: var(--bg-surface);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 10px 12px;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-  text-align: left;
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  padding: 5px 28px 5px 10px;
+  width: 180px;
+  outline: none;
+  transition: border-color 0.15s;
 }
-.mood-card:hover { background: var(--bg-card); border-color: var(--border-mid); }
-.mood-icon { font-size: 1rem; margin-bottom: 4px; }
-.mood-name { font-size: 0.82rem; font-weight: 500; color: var(--fg); }
-.mood-desc { font-family: var(--font-mono); font-size: 0.62rem; color: var(--fg-faint); margin-top: 2px; }
-.mood-rec {
-  background: var(--teal-light);
-  border: 0.5px solid var(--teal-border);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-  margin-top: 0.75rem;
+.bs-search::placeholder { color: var(--fg-faint); }
+.bs-search:focus { border-color: var(--teal); }
+.bs-search-clear {
+  position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--fg-faint);
+  cursor: pointer; font-size: 0.7rem; padding: 0; display: none; line-height: 1;
 }
-.mood-rec-label {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 8px;
-}
-.mood-rec-title { font-family: var(--font-serif); font-size: 1.1rem; color: var(--fg); margin-bottom: 2px; }
-.mood-rec-author { font-size: 0.8rem; color: var(--fg-muted); margin-bottom: 8px; }
-.mood-rec-why { font-size: 0.82rem; color: var(--fg); line-height: 1.6; font-weight: 300; }
-.mood-dismiss {
-  background: none; border: none; cursor: pointer;
-  font-family: var(--font-mono); font-size: 0.68rem;
-  color: var(--teal); margin-top: 10px; padding: 0;
-}
+.bs-search-clear.visible { display: block; }
+.bs-search-clear:hover { color: var(--fg); }
 
-/* Book list */
-.rl-list { display: flex; flex-direction: column; gap: 0; }
-.rl-empty {
+/* ── Book list ───────────────────────────────── */
+.bs-list { display: flex; flex-direction: column; }
+.bs-empty {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--fg-faint);
@@ -165,120 +217,116 @@ permalink: /bookshelf/
   letter-spacing: 0.06em;
 }
 
-/* Book card */
-.book-card {
-  border-bottom: 0.5px solid var(--border);
-  padding: 14px 0;
+/* ── Book row ────────────────────────────────── */
+.bs-book { display: flex; gap: 0; border-bottom: 0.5px solid var(--border); }
+.bs-book:first-child { border-top: 0.5px solid var(--border); }
+.bs-book-spine { width: 3px; flex-shrink: 0; }
+.bs-book-inner { flex: 1; min-width: 0; padding: 0.85rem 0 0.85rem 0.9rem; }
+.bs-book-main { display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; }
+.bs-book-content { flex: 1; min-width: 0; }
+.bs-book-top { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; flex-wrap: wrap; }
+.bs-book-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  line-height: 1.25;
 }
-.book-card:first-child { border-top: 0.5px solid var(--border); }
-.book-card-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  cursor: pointer;
-}
-.book-left { flex: 1; min-width: 0; }
-.book-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 5px; }
-.book-badge {
+.bs-book-author { font-size: 0.78rem; color: var(--fg-muted); font-weight: 300; }
+.bs-book-row2 { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+.bs-badge {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
   padding: 2px 8px;
   border-radius: 20px;
   border: 0.5px solid;
   white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.15s;
 }
-.book-title {
-  font-family: var(--font-serif);
-  font-size: 1rem;
-  color: var(--fg);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  margin-bottom: 2px;
-}
-.book-author { font-size: 0.8rem; color: var(--fg-muted); font-weight: 300; }
-.book-meta {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
+.bs-badge:hover { opacity: 0.75; }
+.bs-book-time { font-family: var(--font-mono); font-size: 0.6rem; color: var(--fg-faint); letter-spacing: 0.04em; }
+.bs-stars { display: flex; gap: 1px; margin-top: 5px; }
+.bs-star { font-size: 0.8rem; cursor: pointer; transition: color 0.1s; line-height: 1; }
+.bs-star.on  { color: var(--amber); }
+.bs-star.off { color: var(--border-mid); }
+.bs-book-chev {
   color: var(--fg-faint);
-  letter-spacing: 0.04em;
-  margin-top: 6px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  padding-top: 2px;
+  transition: transform 0.2s, color 0.15s;
 }
-.book-toggle {
-  background: none; border: none; cursor: pointer;
-  color: var(--fg-faint); font-size: 0.7rem; padding: 2px; flex-shrink: 0;
-  transition: color 0.15s;
-}
-.book-toggle:hover { color: var(--fg); }
+.bs-book-chev.open { transform: rotate(90deg); color: var(--fg-muted); }
 
-/* Stars */
-.book-stars { display: flex; gap: 1px; margin-top: 6px; }
-.star { font-size: 0.9rem; cursor: pointer; transition: color 0.1s; }
-.star.filled { color: var(--amber); }
-.star.empty { color: var(--border-mid); }
-
-/* Expanded detail */
-.book-detail {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 0.5px solid var(--border);
-  display: none;
+/* ── Expanded detail ─────────────────────────── */
+.bs-detail { display: none; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--border); }
+.bs-detail.open { display: block; }
+.bs-detail-cat {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--fg-faint);
+  margin-bottom: 5px;
 }
-.book-detail.open { display: block; }
-.book-why {
-  font-size: 0.83rem;
-  color: var(--fg-muted);
-  line-height: 1.65;
-  font-weight: 300;
-  margin-bottom: 10px;
-}
-.book-notes {
-  font-size: 0.83rem;
+.bs-detail-why { font-size: 0.82rem; color: var(--fg-muted); line-height: 1.65; font-weight: 300; }
+.bs-detail-notes {
+  font-size: 0.82rem;
   color: var(--fg-muted);
   line-height: 1.6;
   font-weight: 300;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 0.5px solid var(--border);
+  font-style: italic;
 }
 
 @media (max-width: 600px) {
-  .rl-top { flex-direction: column; gap: 1rem; }
-  .rl-stats { flex-direction: row; gap: 1.25rem; }
-  .rl-stat { text-align: left; }
+  .bs-stats { gap: 1rem; }
+  .bs-stat-val { font-size: 1.3rem; }
+  .bs-mood-grid { gap: 0.3rem; }
+  .bs-mood-btn-desc { display: none; }
+  .bs-search { width: 150px; }
+  .bs-book-title { font-size: 0.95rem; }
 }
 </style>
 
 <main>
-  <div class="rl-top">
-    <div>
-      <div class="page-title">Bookshelf</div>
-      <p class="rl-subtitle">Books I've read, am reading, or want to read.</p>
-    </div>
-    <div class="rl-stats" id="rl-stats"></div>
-  </div>
 
-  <div class="mood-section">
-    <button class="mood-trigger" id="mood-trigger">◉ What should I read next?</button>
-    <div id="mood-picker" style="display:none">
-      <div class="mood-grid" id="mood-grid"></div>
-      <div id="mood-rec" style="display:none"></div>
+<div class="bs-header">
+  <div class="bs-title-row">
+    <h1 class="page-title" style="margin-bottom:0;">Bookshelf</h1>
+    <span class="bs-subtitle" id="bs-count-label">— books</span>
+  </div>
+  <div class="bs-stats" id="bs-stats"></div>
+</div>
+
+<div class="bs-mood-strip">
+  <button class="bs-mood-trigger" id="bs-mood-trigger">
+    <span class="bs-mood-trigger-dot"></span>
+    <span class="bs-mood-trigger-text">What should I read next?</span>
+    <span class="bs-mood-trigger-arr" id="bs-mood-arr">›</span>
+  </button>
+  <div class="bs-mood-body" id="bs-mood-body">
+    <div class="bs-mood-grid" id="bs-mood-grid"></div>
+    <div class="bs-mood-rec" id="bs-mood-rec"></div>
+  </div>
+</div>
+
+<div class="bs-filters">
+  <div class="bs-filter-row" id="bs-status-row"></div>
+  <div class="bs-filter-row" id="bs-cat-row"></div>
+  <div class="bs-filter-row">
+    <div class="bs-search-wrap">
+      <input class="bs-search" id="bs-search" type="text" placeholder="Search title or author…" autocomplete="off" />
+      <button class="bs-search-clear" id="bs-search-clear">✕</button>
     </div>
   </div>
+</div>
 
-  <div class="rl-filters">
-    <div class="rl-filter-group" id="status-filters"></div>
-    <div class="rl-filter-group" id="cat-filters"></div>
-    <div class="rl-filter-group">
-      <div class="author-search-wrap">
-        <input class="author-search" id="author-search" type="text" placeholder="Search by author…" autocomplete="off">
-        <button class="author-search-clear" id="author-search-clear" aria-label="Clear">✕</button>
-      </div>
-    </div>
-  </div>
+<div class="bs-list" id="bs-list"></div>
 
-  <div class="rl-list" id="rl-list"></div>
 </main>
 
 <script>
@@ -409,253 +457,247 @@ const CATEGORIES = ["All","Business / Strategy","Finance / Investing","Biography
 const STATUSES   = ["All","recommended","want to read","reading","finished"];
 
 const MOODS = [
-  { id:"focused",    label:"Focused",    icon:"◎", desc:"Building expertise" },
-  { id:"curious",    label:"Curious",    icon:"◈", desc:"Exploring new areas" },
-  { id:"relaxed",    label:"Relaxed",    icon:"◇", desc:"Story-driven, narrative" },
-  { id:"energized",  label:"Energized",  icon:"◆", desc:"Ambitious, inspiring" },
-  { id:"reflective", label:"Reflective", icon:"◉", desc:"Philosophy, meaning" },
+  { id:"focused",    label:"Focused",    icon:"◎", desc:"Deep expertise" },
+  { id:"curious",    label:"Curious",    icon:"◈", desc:"New territory" },
+  { id:"relaxed",    label:"Relaxed",    icon:"◇", desc:"Narrative flow" },
+  { id:"energized",  label:"Energized",  icon:"◆", desc:"Inspiring" },
+  { id:"reflective", label:"Reflective", icon:"◉", desc:"Philosophy" },
 ];
 
-const CAT_STYLE = {
-  "Business / Strategy":  { bg:"#EAF3DE", text:"#3B6D11", border:"#C0DD97" },
-  "Finance / Investing":  { bg:"#E6F1FB", text:"#185FA5", border:"#B5D4F4" },
-  "Biography / Memoir":   { bg:"#FAEEDA", text:"#854F0B", border:"#FAC775" },
-  "History / Politics":   { bg:"#FAECE7", text:"#993C1D", border:"#F5C4B3" },
-  "Science / Philosophy": { bg:"#EEEDFE", text:"#534AB7", border:"#CECBF6" },
+const CAT_COLOR = {
+  "Business / Strategy":  "#639922",
+  "Finance / Investing":  "#378ADD",
+  "Biography / Memoir":   "#EF9F27",
+  "History / Politics":   "#D85A30",
+  "Science / Philosophy": "#7F77DD",
+};
+const CAT_SHORT = {
+  "Business / Strategy":  "Business",
+  "Finance / Investing":  "Finance",
+  "Biography / Memoir":   "Biography",
+  "History / Politics":   "History",
+  "Science / Philosophy": "Philosophy",
 };
 const STATUS_STYLE = {
-  "recommended":  { bg:"#FAEEDA", text:"#854F0B", dot:"#EF9F27" },
-  "want to read": { bg:"#F1EFE8", text:"#5F5E5A", dot:"#888780" },
-  "reading":      { bg:"#E6F1FB", text:"#185FA5", dot:"#378ADD" },
-  "finished":     { bg:"#EAF3DE", text:"#3B6D11", dot:"#639922" },
+  "recommended":  { bg:"var(--s-rec-bg)",  text:"var(--s-rec-text)",  border:"var(--s-rec-border)"  },
+  "want to read": { bg:"var(--s-want-bg)", text:"var(--s-want-text)", border:"var(--s-want-border)" },
+  "reading":      { bg:"var(--s-read-bg)", text:"var(--s-read-text)", border:"var(--s-read-border)" },
+  "finished":     { bg:"var(--s-fin-bg)",  text:"var(--s-fin-text)",  border:"var(--s-fin-border)"  },
 };
-const STATUS_ORDER = ["recommended","want to read","reading","finished"];
+const STATUS_ORDER  = ["recommended","want to read","reading","finished"];
+const STATUS_LABELS = { "recommended":"recommended", "reading":"reading", "finished":"finished", "want to read":"want to read" };
 
-// ── State ─────────────────────────────────────────────
-const STORAGE_KEY = "nbp-reading-list-v1";
+// ── State ─────────────────────────────────────────
+const SK = "nbp-bs-v2";
 let books = [];
 let catFilter = "All";
 let statusFilter = "All";
-let authorQuery = "";
+let searchQ = "";
 let moodOpen = false;
 let activeMood = null;
 
-function loadBooks() {
+function load() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-    if (saved) {
-      const ids = new Set(saved.map(b => b.id));
-      const missing = BOOKS.filter(b => !ids.has(b.id));
-      books = [...saved, ...missing];
+    const s = JSON.parse(localStorage.getItem(SK) || "null");
+    if (s) {
+      const ids = new Set(s.map(b => b.id));
+      books = [...s, ...BOOKS.filter(b => !ids.has(b.id))];
     } else {
       books = BOOKS.map(b => ({...b}));
     }
   } catch { books = BOOKS.map(b => ({...b})); }
 }
-function saveBooks() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(books)); } catch {}
-}
+function save() { try { localStorage.setItem(SK, JSON.stringify(books)); } catch {} }
 function getBook(id) { return books.find(b => b.id === id); }
-function updateBook(updated) {
-  books = books.map(b => b.id === updated.id ? updated : b);
-  saveBooks();
-}
+function updateBook(u) { books = books.map(b => b.id === u.id ? u : b); save(); }
 
-// ── Stats ──────────────────────────────────────────────
+// ── Stats ─────────────────────────────────────────
 function renderStats() {
   const finished = books.filter(b => b.status === "finished");
-  const statsEl = document.getElementById("rl-stats");
-  statsEl.innerHTML = [
-    [books.length, "Books"],
+  const hrs = finished.reduce((s, b) => s + (b.hours || 0), 0);
+  document.getElementById("bs-count-label").textContent = `${books.length} books`;
+  document.getElementById("bs-stats").innerHTML = [
     [books.filter(b => b.status === "reading").length, "Reading"],
     [finished.length, "Finished"],
-    [finished.reduce((s,b) => s + b.hours, 0) + "h", "Read"],
-  ].map(([v,l]) => `<div class="rl-stat"><div class="rl-stat-val">${v}</div><div class="rl-stat-label">${l}</div></div>`).join("");
+    [hrs + "h", "Read"],
+  ].map(([v, l]) => `<div class="bs-stat"><div class="bs-stat-val">${v}</div><div class="bs-stat-label">${l}</div></div>`).join("");
 }
 
-// ── Filters ────────────────────────────────────────────
+// ── Filters ───────────────────────────────────────
 function renderFilters() {
-  document.getElementById("status-filters").innerHTML =
-    STATUSES.map(s => `<button class="rl-filter-btn${statusFilter===s?" active":""}" data-type="status" data-val="${s}">${s}</button>`).join("");
-  document.getElementById("cat-filters").innerHTML =
-    CATEGORIES.map(c => `<button class="rl-filter-btn${catFilter===c?" active":""}" data-type="cat" data-val="${c}">${c}</button>`).join("");
+  document.getElementById("bs-status-row").innerHTML =
+    STATUSES.map(s => `<button class="bs-filter-pill${statusFilter===s?" active":""}" data-type="status" data-val="${s}">${s === "All" ? "All statuses" : STATUS_LABELS[s]}</button>`).join("");
+  document.getElementById("bs-cat-row").innerHTML =
+    CATEGORIES.map(c => `<button class="bs-filter-pill${catFilter===c?" active":""}" data-type="cat" data-val="${c}">${c === "All" ? "All categories" : CAT_SHORT[c]}</button>`).join("");
 }
 
-document.getElementById("status-filters").addEventListener("click", e => {
-  const btn = e.target.closest(".rl-filter-btn");
-  if (!btn) return;
-  statusFilter = btn.dataset.val;
-  renderFilters();
-  renderList();
+document.getElementById("bs-status-row").addEventListener("click", e => {
+  const b = e.target.closest(".bs-filter-pill"); if (!b) return;
+  statusFilter = b.dataset.val; renderFilters(); renderList();
 });
-document.getElementById("cat-filters").addEventListener("click", e => {
-  const btn = e.target.closest(".rl-filter-btn");
-  if (!btn) return;
-  catFilter = btn.dataset.val;
-  renderFilters();
-  renderList();
+document.getElementById("bs-cat-row").addEventListener("click", e => {
+  const b = e.target.closest(".bs-filter-pill"); if (!b) return;
+  catFilter = b.dataset.val; renderFilters(); renderList();
 });
 
-const authorInput = document.getElementById("author-search");
-const authorClear = document.getElementById("author-search-clear");
-authorInput.addEventListener("input", () => {
-  authorQuery = authorInput.value.trim();
-  authorClear.classList.toggle("visible", authorQuery.length > 0);
+const searchEl = document.getElementById("bs-search");
+const clearEl  = document.getElementById("bs-search-clear");
+searchEl.addEventListener("input", () => {
+  searchQ = searchEl.value.trim();
+  clearEl.classList.toggle("visible", searchQ.length > 0);
   renderList();
 });
-authorClear.addEventListener("click", () => {
-  authorQuery = "";
-  authorInput.value = "";
-  authorClear.classList.remove("visible");
-  renderList();
+clearEl.addEventListener("click", () => {
+  searchQ = ""; searchEl.value = "";
+  clearEl.classList.remove("visible"); renderList();
 });
 
-// ── Mood ───────────────────────────────────────────────
-function renderMoodPicker() {
-  const picker = document.getElementById("mood-picker");
-  picker.style.display = moodOpen ? "block" : "none";
+// ── Mood ──────────────────────────────────────────
+function renderMood() {
+  const arr  = document.getElementById("bs-mood-arr");
+  const body = document.getElementById("bs-mood-body");
+  arr.classList.toggle("open", moodOpen);
+  body.classList.toggle("open", moodOpen);
   if (!moodOpen) return;
 
+  const grid = document.getElementById("bs-mood-grid");
+  const rec  = document.getElementById("bs-mood-rec");
+
+  grid.innerHTML = MOODS.map(m =>
+    `<button class="bs-mood-btn${activeMood && activeMood.id===m.id?" active":""}" data-mood="${m.id}">
+      <div class="bs-mood-btn-icon">${m.icon}</div>
+      <span class="bs-mood-btn-name">${m.label}</span>
+      <span class="bs-mood-btn-desc">${m.desc}</span>
+    </button>`
+  ).join("");
+
   if (activeMood) {
-    document.getElementById("mood-grid").innerHTML = "";
-    const rec = document.getElementById("mood-rec");
-    const candidates = books.filter(b => (b.status === "want to read" || b.status === "recommended") && b.moodFit?.includes(activeMood.id));
-    const pick = candidates[0] || books.find(b => b.status === "want to read" || b.status === "recommended");
+    const pool = books.filter(b =>
+      (b.status === "recommended" || b.status === "want to read") &&
+      Array.isArray(b.moodFit) && b.moodFit.includes(activeMood.id)
+    );
+    const pick = pool[0] || books.find(b => b.status === "recommended" || b.status === "want to read");
     if (pick) {
-      const cs = CAT_STYLE[pick.category] || {};
-      rec.style.display = "block";
+      rec.className = "bs-mood-rec show";
       rec.innerHTML = `
-        <div class="mood-rec">
-          <div class="mood-rec-label">${activeMood.icon} recommended for ${activeMood.label.toLowerCase()} mood</div>
-          <span class="book-badge" style="background:${cs.bg};color:${cs.text};border-color:${cs.border}">${pick.category}</span>
-          <div class="mood-rec-title" style="margin-top:8px">${pick.title}</div>
-          <div class="mood-rec-author">${pick.author}</div>
-          ${pick.why ? `<div class="mood-rec-why">${pick.why}</div>` : ""}
-          <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--teal);margin-top:8px">~${pick.hours}h · ${pick.pages}p</div>
-          <button class="mood-dismiss" onclick="activeMood=null;renderMoodPicker()">← pick a different mood</button>
-        </div>`;
+        <div class="bs-mood-rec-label">${activeMood.icon} ${activeMood.label.toLowerCase()} pick</div>
+        <div class="bs-mood-rec-title">${pick.title}</div>
+        <div class="bs-mood-rec-author">${pick.author}</div>
+        ${pick.why ? `<div class="bs-mood-rec-why">${pick.why}</div>` : ""}
+        <div class="bs-mood-rec-meta">~${pick.hours}h &middot; ${pick.pages}p</div>
+        <button class="bs-mood-reset" onclick="activeMood=null;renderMood();">try a different mood</button>
+      `;
     }
   } else {
-    document.getElementById("mood-rec").style.display = "none";
-    document.getElementById("mood-grid").innerHTML = MOODS.map(m =>
-      `<button class="mood-card" data-mood="${m.id}">
-        <div class="mood-icon">${m.icon}</div>
-        <div class="mood-name">${m.label}</div>
-        <div class="mood-desc">${m.desc}</div>
-      </button>`
-    ).join("");
+    rec.className = "bs-mood-rec";
+    rec.innerHTML = "";
   }
 }
 
-document.getElementById("mood-trigger").addEventListener("click", () => {
+document.getElementById("bs-mood-trigger").addEventListener("click", () => {
   moodOpen = !moodOpen;
   if (!moodOpen) activeMood = null;
-  renderMoodPicker();
+  renderMood();
 });
-document.getElementById("mood-grid").addEventListener("click", e => {
-  const card = e.target.closest(".mood-card");
-  if (!card) return;
-  activeMood = MOODS.find(m => m.id === card.dataset.mood);
-  renderMoodPicker();
+document.getElementById("bs-mood-grid").addEventListener("click", e => {
+  const btn = e.target.closest(".bs-mood-btn"); if (!btn) return;
+  activeMood = MOODS.find(m => m.id === btn.dataset.mood);
+  renderMood();
 });
 
-// ── Book list ──────────────────────────────────────────
+// ── Stars ─────────────────────────────────────────
 function starsHTML(rating, id) {
   return [1,2,3,4,5].map(n =>
-    `<span class="star ${n <= (rating||0) ? "filled" : "empty"}" data-star="${n}" data-id="${id}">★</span>`
+    `<span class="bs-star ${n <= (rating||0) ? "on" : "off"}" data-star="${n}" data-id="${id}">★</span>`
   ).join("");
 }
 
-function cardHTML(b) {
-  const cs = CAT_STYLE[b.category] || {};
-  const ss = STATUS_STYLE[b.status] || {};
+// ── Book row HTML ─────────────────────────────────
+function bookHTML(b) {
+  const spine = CAT_COLOR[b.category] || "#888780";
+  const ss    = STATUS_STYLE[b.status] || STATUS_STYLE["recommended"];
+  const hasDetail = b.why || b.notes;
   return `
-  <div class="book-card" id="card-${b.id}">
-    <div class="book-card-main" data-toggle="${b.id}">
-      <div class="book-left">
-        <div class="book-badges">
-          <span class="book-badge" style="background:${cs.bg};color:${cs.text};border-color:${cs.border}">${b.category}</span>
-          <span class="book-badge" style="background:${ss.bg};color:${ss.text};border-color:${ss.dot};cursor:pointer" data-cycle="${b.id}">
-            <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:${ss.dot};margin-right:4px;vertical-align:middle"></span>${b.status}
-          </span>
+<div class="bs-book" id="bs-book-${b.id}">
+  <div class="bs-book-spine" style="background:${spine};"></div>
+  <div class="bs-book-inner">
+    <div class="bs-book-main" data-id="${b.id}">
+      <div class="bs-book-content">
+        <div class="bs-book-top">
+          <span class="bs-book-title">${b.title}</span>
         </div>
-        <div class="book-title">${b.title}</div>
-        <div class="book-author">${b.author}</div>
-        <div class="book-meta">
-          <span>~${b.hours}h</span><span>${b.pages}p</span>${b.source ? `<span>${b.source}</span>` : ""}
+        <div class="bs-book-author">${b.author}</div>
+        <div class="bs-book-row2">
+          <span class="bs-badge" style="background:${ss.bg};color:${ss.text};border-color:${ss.border};" data-cycle="${b.id}">${b.status}</span>
+          <span class="bs-book-time">~${b.hours}h &middot; ${b.pages}p</span>
+          ${b.source ? `<span class="bs-book-time">${b.source}</span>` : ""}
         </div>
-        ${b.status === "finished" ? `<div class="book-stars">${starsHTML(b.rating, b.id)}</div>` : ""}
+        ${b.status === "finished" ? `<div class="bs-stars">${starsHTML(b.rating, b.id)}</div>` : ""}
       </div>
-      <button class="book-toggle" data-toggle="${b.id}">▼</button>
+      ${hasDetail ? `<span class="bs-book-chev" data-id="${b.id}">›</span>` : ""}
     </div>
-    <div class="book-detail" id="detail-${b.id}">
-      ${b.why ? `<p class="book-why">${b.why}</p>` : ""}
-      ${b.notes ? `<p class="book-notes">${b.notes}</p>` : ""}
-    </div>
-  </div>`;
+    ${hasDetail ? `
+    <div class="bs-detail" id="bs-detail-${b.id}">
+      <div class="bs-detail-cat">${CAT_SHORT[b.category] || b.category}</div>
+      ${b.why   ? `<div class="bs-detail-why">${b.why}</div>` : ""}
+      ${b.notes ? `<div class="bs-detail-notes">${b.notes}</div>` : ""}
+    </div>` : ""}
+  </div>
+</div>`;
 }
 
+// ── Render list ───────────────────────────────────
 function renderList() {
-  const q = authorQuery.toLowerCase();
+  const q = searchQ.toLowerCase();
   const visible = books.filter(b =>
     (catFilter === "All" || b.category === catFilter) &&
     (statusFilter === "All" || b.status === statusFilter) &&
-    (!q || b.author.toLowerCase().includes(q))
+    (!q || b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q))
   );
-  const el = document.getElementById("rl-list");
-  if (visible.length === 0) {
-    el.innerHTML = `<div class="rl-empty">No books match this filter.</div>`;
+  const el = document.getElementById("bs-list");
+  if (!visible.length) {
+    el.innerHTML = `<div class="bs-empty">No books match this filter.</div>`;
     return;
   }
-  el.innerHTML = visible.map(cardHTML).join("");
+  el.innerHTML = visible.map(bookHTML).join("");
 }
 
-// ── Events on book list (delegated) ───────────────────
-document.getElementById("rl-list").addEventListener("click", e => {
-  // Expand/collapse
-  const toggle = e.target.closest("[data-toggle]");
-  if (toggle && !e.target.closest("[data-cycle]") && !e.target.closest(".star")) {
-    const id = toggle.dataset.toggle;
-    const detail = document.getElementById(`detail-${id}`);
-    const btn = document.querySelector(`button.book-toggle[data-toggle="${id}"]`);
-    if (detail) {
-      const open = detail.classList.toggle("open");
-      if (btn) btn.textContent = open ? "▲" : "▼";
-    }
-    return;
-  }
-
-  // Cycle status
+// ── Delegated events on list ──────────────────────
+document.getElementById("bs-list").addEventListener("click", e => {
   const cycle = e.target.closest("[data-cycle]");
   if (cycle) {
     e.stopPropagation();
-    const b = getBook(cycle.dataset.cycle);
-    if (!b) return;
+    const b = getBook(cycle.dataset.cycle); if (!b) return;
     const next = STATUS_ORDER[(STATUS_ORDER.indexOf(b.status) + 1) % STATUS_ORDER.length];
     updateBook({...b, status: next});
-    renderStats();
-    renderList();
+    renderStats(); renderList();
     return;
   }
-
-  // Star rating
-  const star = e.target.closest(".star");
+  const star = e.target.closest(".bs-star");
   if (star) {
     e.stopPropagation();
-    const b = getBook(star.dataset.id);
-    if (!b) return;
+    const b = getBook(star.dataset.id); if (!b) return;
     updateBook({...b, rating: parseInt(star.dataset.star)});
-    const starsEl = document.querySelector(`#card-${b.id} .book-stars`);
-    if (starsEl) starsEl.innerHTML = starsHTML(parseInt(star.dataset.star), b.id);
+    const wrap = document.querySelector(`#bs-book-${b.id} .bs-stars`);
+    if (wrap) wrap.innerHTML = starsHTML(parseInt(star.dataset.star), b.id);
     return;
   }
-
+  const main = e.target.closest(".bs-book-main");
+  if (main) {
+    const id = main.dataset.id;
+    const detail = document.getElementById(`bs-detail-${id}`);
+    const chev   = main.querySelector(".bs-book-chev");
+    if (detail) {
+      const open = detail.classList.toggle("open");
+      if (chev) chev.classList.toggle("open", open);
+    }
+  }
 });
 
-// ── Init ───────────────────────────────────────────────
-loadBooks();
+// ── Boot ──────────────────────────────────────────
+load();
 renderStats();
 renderFilters();
-renderMoodPicker();
+renderMood();
 renderList();
 </script>
