@@ -9,7 +9,7 @@ twitter_username: nprithvi
 github_username:  nbprithv
 
 markdown:  kramdown
-permalink: /writing/:title/
+permalink: /posts/:title/
 
 plugins:
   - jekyll-sitemap

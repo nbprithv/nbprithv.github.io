@@ -1,11 +1,30 @@
 ---
 layout: default
 ---
-<main>
-  <a href="/" class="back">← home</a>
-  <article>
-    <h1>{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}</p>
+<main class="post-page">
+  <div class="post-header">
+    <a href="/posts" class="back-link">← Posts</a>
+    <h1 class="post-title">{{ page.title }}</h1>
+    {% if page.excerpt %}
+    <p class="post-lede">{{ page.excerpt }}</p>
+    {% endif %}
+    <div class="post-meta-row">
+      <time>{{ page.date | date: "%B %-d, %Y" }}</time>
+      <span class="post-meta-sep">·</span>
+      <span>{{ content | number_of_words | divided_by: 200 | plus: 1 }} min read</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="content post-body">
     {{ content }}
-  </article>
+  </div>
+
+  {% if page.substack_url %}
+  <div class="post-footer">
+    <div class="divider"></div>
+    <p class="post-origin">Originally published on <a href="{{ page.substack_url }}" target="_blank" rel="noopener">Substack</a>.</p>
+  </div>
+  {% endif %}
 </main>

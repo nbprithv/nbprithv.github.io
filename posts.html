@@ -1,0 +1,22 @@
+---
+layout: default
+title: Posts
+permalink: /posts/
+---
+<main>
+  <div class="page-title">Posts</div>
+  <p class="page-subtitle">Essays on engineering, leadership, and the way I see work.</p>
+
+  <ul class="post-list">
+    {% assign all_posts = site.posts | sort: 'date' | reverse %}
+    {% for post in all_posts %}
+    <li>
+      <div class="post-info">
+        <a href="{{ post.url }}">{{ post.title }}</a>
+        {% if post.excerpt %}<p class="post-excerpt">{{ post.excerpt }}</p>{% endif %}
+      </div>
+      <time>{{ post.date | date: "%b %Y" }}</time>
+    </li>
+    {% endfor %}
+  </ul>
+</main>
