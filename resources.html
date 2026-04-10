@@ -5,123 +5,88 @@ permalink: /resources/
 ---
 
 <style>
-.resource-section {
-  margin-bottom: 2.5rem;
+.resources-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
 }
 
-.resource-section-title {
+.resource-category {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--fg-faint);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  margin: 1.5rem 0 0.5rem;
+  padding-bottom: 0.4rem;
   border-bottom: 0.5px solid var(--border);
 }
 
-.resource-card {
+.resource-category:first-child { margin-top: 0; }
+
+.resource-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
   background: var(--bg-surface);
   border: 0.5px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 0.75rem;
-  transition: border-color 0.15s;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
 }
 
-.resource-card:hover {
+.resource-entry:hover {
   border-color: var(--border-mid);
+  background: var(--bg-card);
 }
 
-.resource-card-title {
+.resource-entry-left { min-width: 0; }
+
+.resource-entry-title {
   font-family: var(--font-serif);
-  font-size: 1.05rem;
   font-style: italic;
+  font-size: 1rem;
   color: var(--fg);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.2rem;
 }
 
-.resource-card-meta {
+.resource-entry-desc {
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resource-entry-tag {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
+  font-size: 0.58rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--fg-faint);
-  margin-bottom: 0.75rem;
-}
-
-.resource-card-body {
-  font-size: 0.9rem;
-  color: var(--fg-muted);
-  line-height: 1.65;
-}
-
-.resource-card-body p { margin-bottom: 0.6rem; }
-.resource-card-body p:last-child { margin-bottom: 0; }
-
-.resource-card-body ul {
-  list-style: disc;
-  padding-left: 1.25rem;
-  margin-bottom: 0.6rem;
-}
-
-.resource-card-body li {
-  margin-bottom: 0.3rem;
-}
-
-.resource-card-body strong {
-  color: var(--fg);
-  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 </style>
 
 <main>
   <div class="page-title">Resources</div>
+  <p class="page-subtitle">Things I've looked into — stretches, habits, research rabbit holes, and anything else worth writing down.</p>
 
-  <div class="content">
-    <p>A running collection of things I've looked into — stretches, habits, research rabbit holes, and anything else that seemed worth writing down.</p>
-  </div>
+  <div class="resources-grid">
 
-  <div style="margin-top: 2rem;" id="resource-list">
+    <div class="resource-category">Fitness &amp; Movement</div>
 
-    <div class="resource-section">
-      <div class="resource-section-title">Fitness &amp; Movement</div>
-
-      <div class="resource-card">
-        <div class="resource-card-title">Mobility Cheat Sheet</div>
-        <div class="resource-card-meta">12 stretches · Hips · Shoulders · Hamstrings · Hold 30–60 sec</div>
-        <div class="resource-card-body">
-
-          <p><strong>Hips</strong></p>
-          <ul>
-            <li><strong>90/90 Hip Stretch</strong> — Both legs at 90°, hinge forward over the front shin. <em>60 sec/side · Hip rotators</em></li>
-            <li><strong>Pigeon Pose</strong> — Knee forward toward same-side wrist, hips low, back leg long. Fold forward to deepen. <em>60 sec/side · Piriformis, glutes</em></li>
-            <li><strong>Low Lunge (Crescent)</strong> — Back knee down, drive hips forward. Arms overhead to intensify. <em>45 sec/side · Hip flexors, psoas</em></li>
-            <li><strong>Butterfly Stretch</strong> — Soles together, press knees toward the floor using elbows. <em>45 sec · Inner hip, groin</em></li>
-          </ul>
-
-          <p><strong>Shoulders</strong></p>
-          <ul>
-            <li><strong>Cross-Body Shoulder Pull</strong> — Arm across chest, opposite forearm presses it closer. Shoulder blades down. <em>30 sec/side · Posterior deltoid</em></li>
-            <li><strong>Doorway Pec Stretch</strong> — Forearms on frame at 90°, lean chest through. <em>30–45 sec · Pecs, anterior delt</em></li>
-            <li><strong>Sleeper Stretch</strong> — Lie on side, bottom arm at 90°, top hand presses wrist toward floor. <em>30 sec/side · Posterior capsule</em></li>
-            <li><strong>Thread the Needle</strong> — All fours, slide one arm under until shoulder and cheek rest on the floor. <em>45 sec/side · Thoracic, rotator cuff</em></li>
-          </ul>
-
-          <p><strong>Hamstrings</strong></p>
-          <ul>
-            <li><strong>Standing Forward Fold</strong> — Hinge at hips, micro-bend knees, grab opposite elbows and sway. <em>45–60 sec · Full hamstring chain</em></li>
-            <li><strong>Supine Single-Leg Pull</strong> — Strap around one foot, extend toward ceiling, other leg flat. <em>45 sec/side · Hamstrings, calf</em></li>
-            <li><strong>Seated Forward Fold</strong> — Legs straight, hinge from hips (not lower back), spine long. <em>60 sec · Biceps femoris</em></li>
-            <li><strong>Half-Split (Lizard Variant)</strong> — From a lunge, shift back and straighten the front leg. Hips square, back flat. <em>45 sec/side · Proximal hamstring</em></li>
-          </ul>
-
-          <p><strong>Tips:</strong> Never bounce — hold steady and breathe into the stretch. Morning is ideal for gentle mobility work; post-workout is best for deeper holds. Consistency beats intensity: 10 min daily beats 1 hr weekly.</p>
-
-        </div>
+    <a href="/resources/mobility" class="resource-entry">
+      <div class="resource-entry-left">
+        <div class="resource-entry-title">Mobility Cheat Sheet</div>
+        <div class="resource-entry-desc">12 essential stretches — hips, shoulders, hamstrings</div>
       </div>
-    </div>
+      <span class="resource-entry-tag">Reference</span>
+    </a>
 
   </div>
-
 </main>

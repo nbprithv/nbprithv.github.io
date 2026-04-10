@@ -1,0 +1,393 @@
+---
+layout: default
+title: Mobility Cheat Sheet
+permalink: /resources/mobility/
+---
+
+<style>
+/* ── Page layout ── */
+.mob-header {
+  margin-bottom: 2rem;
+}
+.mob-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 1.5rem;
+  transition: color 0.15s;
+}
+.mob-back:hover { color: var(--fg-muted); }
+.mob-back svg { flex-shrink: 0; }
+
+.mob-meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 0.5rem;
+}
+
+.mob-print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  margin-top: 1rem;
+}
+.mob-print-btn:hover { border-color: var(--border-mid); color: var(--fg); }
+
+/* ── Stretch sections ── */
+.mob-section {
+  margin-bottom: 2rem;
+}
+.mob-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  padding-bottom: 0.4rem;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+
+.mob-stretch {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 0 0.75rem;
+  align-items: baseline;
+  padding: 0.75rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.mob-stretch:last-child { border-bottom: none; }
+
+.mob-num {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--fg-faint);
+  letter-spacing: 0.04em;
+  padding-top: 0.15rem;
+}
+
+.mob-stretch-body {}
+.mob-stretch-name {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--fg);
+  margin-bottom: 0.2rem;
+}
+.mob-stretch-cue {
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  line-height: 1.55;
+}
+
+.mob-stretch-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+.mob-hold {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--fg-faint);
+  white-space: nowrap;
+}
+.mob-target {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--fg-faint);
+  white-space: nowrap;
+  margin-top: 0.15rem;
+}
+
+/* ── Tips box ── */
+.mob-tips {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-left: 2px solid var(--teal);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+}
+.mob-tips-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+.mob-tips ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.mob-tips li {
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  padding-left: 1rem;
+  position: relative;
+}
+.mob-tips li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--fg-faint);
+}
+
+/* ── Print styles ── */
+@media print {
+  .sidebar,
+  .mob-back,
+  .mob-print-btn { display: none !important; }
+
+  body {
+    font-size: 11px;
+    background: #fff;
+    color: #000;
+    display: block;
+  }
+
+  .content-wrap { display: block; }
+
+  main {
+    max-width: 100%;
+    padding: 1.5cm 1.5cm 1cm;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .mob-meta { margin-bottom: 1rem; }
+
+  :root {
+    --fg: #000;
+    --fg-muted: #333;
+    --fg-faint: #666;
+    --border: #ccc;
+    --bg-surface: #f5f5f5;
+    --teal: #0F6E56;
+  }
+
+  .mob-stretch { padding: 0.4rem 0; }
+  .mob-stretch-name { font-size: 0.85rem; }
+  .mob-stretch-cue { font-size: 0.78rem; }
+  .mob-section { margin-bottom: 1rem; break-inside: avoid; }
+  .mob-tips { margin-top: 1rem; }
+
+  a[href]::after { content: none; }
+}
+</style>
+
+<main>
+
+  <div class="mob-header">
+    <a href="/resources" class="mob-back">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7.5 2L3.5 6l4 4"/>
+      </svg>
+      Resources
+    </a>
+
+    <div class="page-title">Mobility Cheat Sheet</div>
+    <div class="mob-meta">12 stretches · Hips · Shoulders · Hamstrings · Hold 30–60 sec</div>
+
+    <button class="mob-print-btn" onclick="window.print()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"/>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      Print
+    </button>
+  </div>
+
+  <!-- Hips -->
+  <div class="mob-section">
+    <div class="mob-section-title">Hips</div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">01</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">90/90 Hip Stretch</div>
+        <div class="mob-stretch-cue">Sit with both legs bent at 90°, one in front and one behind. Stay tall, hinge forward over the front shin. Switch sides.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">60 sec/side</div>
+        <div class="mob-target">Hip rotators</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">02</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Pigeon Pose</div>
+        <div class="mob-stretch-cue">From a plank, bring one knee forward toward the same-side wrist. Lower your hips, keep the back leg long. Fold forward for a deeper release.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">60 sec/side</div>
+        <div class="mob-target">Piriformis, glutes</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">03</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Low Lunge (Crescent)</div>
+        <div class="mob-stretch-cue">Step one foot forward into a lunge, drop the back knee to the floor. Drive hips forward and down. Raise arms overhead to intensify.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">45 sec/side</div>
+        <div class="mob-target">Hip flexors, psoas</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">04</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Butterfly Stretch</div>
+        <div class="mob-stretch-cue">Sit with soles of feet together, knees falling outward. Hold your feet, sit tall, then gently press knees toward the floor using elbows.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">45 sec</div>
+        <div class="mob-target">Inner hip, groin</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shoulders -->
+  <div class="mob-section">
+    <div class="mob-section-title">Shoulders</div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">05</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Cross-Body Shoulder Pull</div>
+        <div class="mob-stretch-cue">Bring one arm across your chest. Use the opposite forearm to gently press it closer. Keep your shoulder blades down, not shrugged.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">30 sec/side</div>
+        <div class="mob-target">Posterior deltoid</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">06</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Doorway Pec Stretch</div>
+        <div class="mob-stretch-cue">Stand in a doorway, forearms on the frame at 90°. Step one foot forward and lean your chest through gently.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">30–45 sec</div>
+        <div class="mob-target">Pecs, anterior delt</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">07</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Sleeper Stretch</div>
+        <div class="mob-stretch-cue">Lie on your side with your bottom arm at 90°. Use your top hand to gently press the bottom wrist toward the floor.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">30 sec/side</div>
+        <div class="mob-target">Posterior capsule</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">08</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Thread the Needle</div>
+        <div class="mob-stretch-cue">Start on all fours. Slide one arm under your body, palm up, until your shoulder and cheek rest on the floor. Keep the other arm pressing down.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">45 sec/side</div>
+        <div class="mob-target">Thoracic, rotator cuff</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hamstrings -->
+  <div class="mob-section">
+    <div class="mob-section-title">Hamstrings</div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">09</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Standing Forward Fold</div>
+        <div class="mob-stretch-cue">Stand with feet hip-width apart, hinge at the hips and let your torso hang down. Micro-bend the knees. Grab opposite elbows and sway gently.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">45–60 sec</div>
+        <div class="mob-target">Full hamstring chain</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">10</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Supine Single-Leg Pull</div>
+        <div class="mob-stretch-cue">Lie on your back. Loop a strap or towel around one foot and extend the leg toward the ceiling. Keep the other leg flat. Pull gently without tucking the hips.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">45 sec/side</div>
+        <div class="mob-target">Hamstrings, calf</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">11</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Seated Forward Fold</div>
+        <div class="mob-stretch-cue">Sit with legs straight, flex your feet. Hinge from the hips — not the lower back — and reach toward your feet. Keep your spine long, not rounded.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">60 sec</div>
+        <div class="mob-target">Biceps femoris</div>
+      </div>
+    </div>
+
+    <div class="mob-stretch">
+      <span class="mob-num">12</span>
+      <div class="mob-stretch-body">
+        <div class="mob-stretch-name">Half-Split (Lizard Variant)</div>
+        <div class="mob-stretch-cue">From a lunge, shift your weight back and straighten your front leg. Flex the foot, hinge forward over it. Keep hips square and back flat.</div>
+      </div>
+      <div class="mob-stretch-meta">
+        <div class="mob-hold">45 sec/side</div>
+        <div class="mob-target">Proximal hamstring</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mob-tips">
+    <div class="mob-tips-label">Tips</div>
+    <ul>
+      <li>Never bounce — hold steady and breathe into the stretch.</li>
+      <li>Morning is ideal for gentle mobility work.</li>
+      <li>Post-workout is best for deeper holds.</li>
+      <li>Consistency beats intensity: 10 min daily beats 1 hr weekly.</li>
+    </ul>
+  </div>
+
+</main>
