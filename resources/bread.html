@@ -1,0 +1,948 @@
+---
+layout: default
+title: Bread Dough Calculator
+permalink: /resources/bread/
+---
+
+<style>
+/* ── Back link ──────────────────────────────── */
+.bread-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 1.5rem;
+  transition: color 0.15s;
+}
+.bread-back:hover { color: var(--fg-muted); }
+
+.bread-meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.07em;
+  color: var(--fg-faint);
+  margin-top: 0.3rem;
+  margin-bottom: 2rem;
+}
+
+/* ── Type tabs ──────────────────────────────── */
+.bread-type-tabs {
+  display: flex;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 1.75rem;
+}
+.bread-tab {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  background: none;
+  border: none;
+  border-bottom: 1.5px solid transparent;
+  padding: 0.5rem 1.1rem 0.65rem;
+  margin-bottom: -0.5px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.bread-tab:hover { color: var(--fg-muted); }
+.bread-tab.active { color: var(--fg); border-bottom-color: var(--teal); }
+
+/* ── Style preset chips ─────────────────────── */
+.style-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.75rem;
+}
+.preset-btn {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 5px 13px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border-mid);
+  background: var(--bg-surface);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.preset-btn:hover { border-color: var(--fg-faint); color: var(--fg); }
+.preset-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+.preset-desc {
+  font-size: 0.78rem;
+  color: var(--fg-faint);
+  margin-bottom: 1.75rem;
+  font-style: italic;
+}
+
+/* ── Form sections ──────────────────────────── */
+.calc-section {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.calc-section:last-of-type { border-bottom: none; }
+
+.calc-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 1.1rem;
+}
+
+/* ── Quantity inputs ────────────────────────── */
+.quantity-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.qty-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.qty-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.qty-stepper button {
+  background: none;
+  border: none;
+  color: var(--fg-muted);
+  width: 34px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+.qty-stepper button:hover { background: var(--bg-card); color: var(--fg); }
+.qty-stepper input {
+  width: 52px;
+  border: none;
+  border-left: 0.5px solid var(--border);
+  border-right: 0.5px solid var(--border);
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: var(--fg);
+  text-align: center;
+  outline: none;
+  padding: 0 4px;
+  height: 36px;
+}
+.qty-input {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: var(--fg);
+  padding: 0 0.75rem;
+  height: 36px;
+  width: 90px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.qty-input:focus { border-color: var(--teal-mid); }
+
+.qty-total {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  padding-bottom: 0.5rem;
+  align-self: flex-end;
+}
+.qty-total strong { color: var(--fg); }
+
+/* Pan size select */
+.qty-select {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--fg);
+  padding: 0 0.75rem;
+  height: 36px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  min-width: 160px;
+}
+.qty-select:focus { border-color: var(--teal-mid); }
+
+/* ── Sliders ────────────────────────────────── */
+.param-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 52px;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+.param-row:last-child { margin-bottom: 0; }
+.param-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.param-value {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--fg);
+  text-align: right;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--teal-mid) 0%, var(--teal-mid) var(--fill, 30%), var(--border-mid) var(--fill, 30%), var(--border-mid) 100%);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--fg);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1.5px var(--fg);
+  transition: transform 0.1s;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px;
+  background: var(--fg);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1.5px var(--fg);
+  cursor: pointer;
+}
+input[type="range"]:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+input[type="range"]:disabled::-webkit-slider-thumb { cursor: not-allowed; }
+
+/* ── Yeast type pills ───────────────────────── */
+.yeast-types {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+  flex-wrap: wrap;
+}
+.yeast-btn {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border-mid);
+  background: var(--bg-surface);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.yeast-btn:hover { border-color: var(--fg-faint); color: var(--fg); }
+.yeast-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+.yeast-note {
+  font-size: 0.75rem;
+  color: var(--fg-faint);
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+/* ── Results card ───────────────────────────── */
+.results-card {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg-card);
+}
+.results-title {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.results-copy-btn {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border-mid);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.results-copy-btn:hover { border-color: var(--fg-faint); color: var(--fg); }
+.results-copy-btn.copied { background: var(--teal-light); border-color: var(--teal-border); color: var(--teal); }
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.results-table tr {
+  border-bottom: 0.5px solid var(--border);
+}
+.results-table tr:last-child { border-bottom: none; }
+.results-table tr.total-row {
+  background: var(--bg-card);
+  border-top: 0.5px solid var(--border-mid);
+}
+.results-table td {
+  padding: 0.65rem 1.25rem;
+  font-size: 0.85rem;
+}
+.results-table td:first-child {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  width: 120px;
+}
+.results-table td.amt {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--fg);
+  text-align: right;
+  width: 70px;
+}
+.results-table td.pct {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fg-faint);
+  text-align: right;
+  width: 55px;
+}
+.results-table td.bar-cell { padding: 0.65rem 1.25rem 0.65rem 0; }
+.bar-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--teal-mid);
+  border-radius: 2px;
+  transition: width 0.25s;
+  min-width: 2px;
+}
+.results-table tr.total-row td {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+/* Timing note */
+.timing-note {
+  padding: 0.85rem 1.25rem;
+  border-top: 0.5px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  background: var(--bg);
+}
+.timing-note strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+/* Row hidden state */
+.result-row.hidden { display: none; }
+</style>
+
+<main>
+
+  <a href="/resources" class="bread-back">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7.5 2L3.5 6l4 4"/>
+    </svg>
+    Resources
+  </a>
+
+  <div class="page-title">Bread Dough Calculator</div>
+  <p class="bread-meta">Baker's percentages · Real-time output · Pizza & Focaccia</p>
+
+  <!-- Type selector -->
+  <div class="bread-type-tabs">
+    <button class="bread-tab active" onclick="setType('pizza', this)">Pizza</button>
+    <button class="bread-tab"        onclick="setType('focaccia', this)">Focaccia</button>
+  </div>
+
+  <!-- Style presets -->
+  <div class="style-presets" id="style-presets"></div>
+  <p class="preset-desc" id="preset-desc"></p>
+
+  <!-- Quantity -->
+  <div class="calc-section">
+    <div class="calc-section-label">Quantity</div>
+
+    <!-- Pizza quantity -->
+    <div id="pizza-qty" class="quantity-row">
+      <div class="qty-field">
+        <span class="qty-label">Dough balls</span>
+        <div class="qty-stepper">
+          <button onclick="stepBalls(-1)">−</button>
+          <input type="number" id="balls-input" value="4" min="1" max="20" oninput="onBallsInput(this.value)">
+          <button onclick="stepBalls(1)">+</button>
+        </div>
+      </div>
+      <div class="qty-field">
+        <span class="qty-label">Ball weight</span>
+        <div class="qty-stepper">
+          <button onclick="stepWeight(-10)">−</button>
+          <input type="number" id="weight-input" value="250" min="100" max="800" step="10" oninput="onWeightInput(this.value)">
+          <button onclick="stepWeight(10)">+</button>
+        </div>
+      </div>
+      <div class="qty-field">
+        <span class="qty-label">&nbsp;</span>
+        <span class="qty-total" id="pizza-total-label">Total <strong>1000g</strong></span>
+      </div>
+    </div>
+
+    <!-- Focaccia quantity -->
+    <div id="focaccia-qty" class="quantity-row" style="display:none">
+      <div class="qty-field">
+        <span class="qty-label">Pan size</span>
+        <select class="qty-select" id="pan-select" onchange="onPanChange(this.value)">
+          <option value="400">8×8" — 400g</option>
+          <option value="500">9×9" — 500g</option>
+          <option value="750" selected>9×13" — 750g</option>
+          <option value="1500">13×18" half sheet — 1500g</option>
+          <option value="custom">Custom weight…</option>
+        </select>
+      </div>
+      <div class="qty-field" id="custom-weight-field" style="display:none">
+        <span class="qty-label">Total weight (g)</span>
+        <input type="number" class="qty-input" id="focaccia-weight" value="750" min="200" max="5000" step="50" oninput="onFocacciaWeightInput(this.value)">
+      </div>
+      <div class="qty-field">
+        <span class="qty-label">&nbsp;</span>
+        <span class="qty-total" id="focaccia-total-label">Total <strong>750g</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Baker's percentages -->
+  <div class="calc-section">
+    <div class="calc-section-label">Baker's Percentages</div>
+
+    <div class="param-row">
+      <span class="param-label">Hydration</span>
+      <input type="range" id="hydration-slider" min="55" max="90" step="1" value="63" oninput="onSlider(this, 'hydration', 1)">
+      <span class="param-value" id="hydration-val">63%</span>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Salt</span>
+      <input type="range" id="salt-slider" min="1" max="4" step="0.1" value="2.8" oninput="onSlider(this, 'salt', 1)">
+      <span class="param-value" id="salt-val">2.8%</span>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Oil</span>
+      <input type="range" id="oil-slider" min="0" max="12" step="0.5" value="0" oninput="onSlider(this, 'oil', 1)">
+      <span class="param-value" id="oil-val">0%</span>
+    </div>
+    <div class="param-row">
+      <span class="param-label">Sugar</span>
+      <input type="range" id="sugar-slider" min="0" max="5" step="0.5" value="0" oninput="onSlider(this, 'sugar', 1)">
+      <span class="param-value" id="sugar-val">0%</span>
+    </div>
+  </div>
+
+  <!-- Yeast -->
+  <div class="calc-section">
+    <div class="calc-section-label">Leavening</div>
+
+    <div class="yeast-types" id="yeast-types">
+      <button class="yeast-btn active" onclick="setYeast('instant', this)">Instant dry</button>
+      <button class="yeast-btn"        onclick="setYeast('active',  this)">Active dry</button>
+      <button class="yeast-btn"        onclick="setYeast('fresh',   this)">Fresh</button>
+      <button class="yeast-btn"        onclick="setYeast('sourdough', this)">Sourdough</button>
+    </div>
+
+    <div id="commercial-yeast-row" class="param-row">
+      <span class="param-label">Yeast</span>
+      <input type="range" id="yeast-slider" min="0.05" max="1" step="0.05" value="0.1" oninput="onSlider(this, 'yeastPct', 2)">
+      <span class="param-value" id="yeast-val">0.10%</span>
+    </div>
+    <div id="starter-row" class="param-row" style="display:none">
+      <span class="param-label">Starter</span>
+      <input type="range" id="starter-slider" min="5" max="30" step="5" value="20" oninput="onSlider(this, 'starterPct', 0)">
+      <span class="param-value" id="starter-val">20%</span>
+    </div>
+
+    <p class="yeast-note" id="yeast-note"></p>
+  </div>
+
+  <!-- Results -->
+  <div class="results-card" id="results-card">
+    <div class="results-header">
+      <span class="results-title" id="results-title">Recipe</span>
+      <button class="results-copy-btn" id="copy-btn" onclick="copyRecipe()">Copy</button>
+    </div>
+    <table class="results-table" id="results-table">
+      <tr>
+        <td>Flour</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></td>
+        <td class="amt" id="r-flour">—</td>
+        <td class="pct">100%</td>
+      </tr>
+      <tr>
+        <td>Water</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" id="bar-water"></div></div></td>
+        <td class="amt" id="r-water">—</td>
+        <td class="pct" id="p-water">—</td>
+      </tr>
+      <tr>
+        <td>Salt</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" id="bar-salt"></div></div></td>
+        <td class="amt" id="r-salt">—</td>
+        <td class="pct" id="p-salt">—</td>
+      </tr>
+      <tr class="result-row" id="row-oil">
+        <td>Oil</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" id="bar-oil"></div></div></td>
+        <td class="amt" id="r-oil">—</td>
+        <td class="pct" id="p-oil">—</td>
+      </tr>
+      <tr class="result-row" id="row-sugar">
+        <td>Sugar</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" id="bar-sugar"></div></div></td>
+        <td class="amt" id="r-sugar">—</td>
+        <td class="pct" id="p-sugar">—</td>
+      </tr>
+      <tr id="row-yeast">
+        <td id="yeast-label">Yeast</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" id="bar-yeast"></div></div></td>
+        <td class="amt" id="r-yeast">—</td>
+        <td class="pct" id="p-yeast">—</td>
+      </tr>
+      <tr class="total-row">
+        <td>Total</td>
+        <td class="bar-cell"></td>
+        <td class="amt" id="r-total">—</td>
+        <td class="pct"></td>
+      </tr>
+    </table>
+    <div class="timing-note" id="timing-note"></div>
+  </div>
+
+</main>
+
+<script>
+/* ── Presets ─────────────────────────────────── */
+const PRESETS = {
+  pizza: {
+    neapolitan: {
+      name: 'Neapolitan',
+      desc: 'High heat, charred leopard crust. Best at 450°C+ (wood fire or broiler).',
+      hydration: 63, salt: 2.8, oil: 0, sugar: 0, yeastPct: 0.1, ballWeight: 250
+    },
+    ny: {
+      name: 'New York',
+      desc: 'Foldable slice with chewy, slightly crisp crust. Cold ferment for best flavour.',
+      hydration: 62, salt: 2.0, oil: 3.0, sugar: 1.5, yeastPct: 0.4, ballWeight: 280
+    },
+    detroit: {
+      name: 'Detroit / Pan',
+      desc: 'Thick, airy crumb with lacey, crispy cheese-edged bottom.',
+      hydration: 72, salt: 2.0, oil: 5.0, sugar: 2.0, yeastPct: 0.5, ballWeight: 400
+    },
+    sicilian: {
+      name: 'Sicilian',
+      desc: 'Thick, spongy squares baked in a oiled sheet pan. Rich and filling.',
+      hydration: 70, salt: 2.0, oil: 4.0, sugar: 1.0, yeastPct: 0.4, ballWeight: 350
+    },
+  },
+  focaccia: {
+    roman: {
+      name: 'Roman',
+      desc: 'Thin, crispy bottom with an open airy crumb. Dimples pool with olive oil.',
+      hydration: 80, salt: 2.0, oil: 6.0, sugar: 0, yeastPct: 0.3
+    },
+    thick: {
+      name: 'Thick & Fluffy',
+      desc: 'Pillowy, bouncy crumb — closer to a focaccia barese. Great for sandwiches.',
+      hydration: 85, salt: 2.0, oil: 8.0, sugar: 0.5, yeastPct: 0.4
+    },
+    herb: {
+      name: 'Rosemary & Sea Salt',
+      desc: 'Medium hydration for a structured crumb. Finish with rosemary, flaky salt, and olive oil.',
+      hydration: 78, salt: 2.5, oil: 7.0, sugar: 0, yeastPct: 0.35
+    }
+  }
+};
+
+/* ── State ───────────────────────────────────── */
+const S = {
+  type: 'pizza',
+  style: 'neapolitan',
+  balls: 4,
+  ballWeight: 250,
+  focacciaWeight: 750,
+  hydration: 63,
+  salt: 2.8,
+  oil: 0,
+  sugar: 0,
+  yeastType: 'instant',
+  yeastPct: 0.1,
+  starterPct: 20,
+};
+
+/* ── Yeast helpers ───────────────────────────── */
+const YEAST_MULTIPLIER = { instant: 1, active: 1.25, fresh: 3, sourdough: 1 };
+const YEAST_LABELS     = { instant: 'Instant yeast', active: 'Active dry yeast', fresh: 'Fresh yeast', sourdough: 'Starter' };
+
+function yeastNote() {
+  const ypct = S.yeastType === 'sourdough' ? S.starterPct : S.yeastPct;
+  if (S.yeastType === 'sourdough') {
+    return S.starterPct >= 20
+      ? '<strong>Same-day:</strong> starter at 20%+ is active — 4–6 hr room temp bulk, then shape and proof 1–2 hr.'
+      : '<strong>Slow proof:</strong> low starter % → long bulk ferment (8–12 hr at room temp or overnight cold).';
+  }
+  if (S.yeastPct <= 0.1) return '<strong>Cold long-ferment (best flavour):</strong> bulk 1 hr, refrigerate 24–72 hr, proof at room temp 2 hr before baking.';
+  if (S.yeastPct <= 0.3) return '<strong>Same-day or overnight:</strong> bulk 2–3 hr room temp, shape, cold-proof overnight, or proof 1–2 hr more at room temp.';
+  return '<strong>Same-day:</strong> bulk 1–2 hr at room temp, shape, proof 45–60 min before baking.';
+}
+
+/* ── Core calculation ────────────────────────── */
+function calculate() {
+  const totalDough = S.type === 'pizza'
+    ? S.balls * S.ballWeight
+    : S.focacciaWeight;
+
+  const h  = S.hydration  / 100;
+  const sa = S.salt       / 100;
+  const o  = S.oil        / 100;
+  const su = S.sugar      / 100;
+
+  let flour, yeast, yeastDisplayLabel;
+
+  if (S.yeastType === 'sourdough') {
+    const sp = S.starterPct / 100;
+    flour  = totalDough / (1 + h + sa + o + su + sp);
+    yeast  = flour * sp;
+    yeastDisplayLabel = 'Starter';
+  } else {
+    const yp = S.yeastPct / 100; // instant-equivalent %
+    flour  = totalDough / (1 + h + sa + o + su + yp);
+    yeast  = flour * yp * YEAST_MULTIPLIER[S.yeastType];
+    yeastDisplayLabel = YEAST_LABELS[S.yeastType];
+  }
+
+  const water = flour * h;
+  const salt  = flour * sa;
+  const oil   = flour * o;
+  const sugar = flour * su;
+  const total = flour + water + salt + oil + sugar + yeast;
+
+  return { flour, water, salt, oil, sugar, yeast, total, yeastDisplayLabel };
+}
+
+/* ── Formatting helpers ──────────────────────── */
+function fmt(g) {
+  if (g < 1)   return g.toFixed(2) + 'g';
+  if (g < 10)  return g.toFixed(1) + 'g';
+  return Math.round(g) + 'g';
+}
+function fmtPct(val, flour) {
+  return (val / flour * 100).toFixed(1) + '%';
+}
+function barPct(val, flour) {
+  return Math.min(100, val / flour * 100) + '%';
+}
+
+/* ── Render results ──────────────────────────── */
+function render() {
+  const R = calculate();
+
+  // Title
+  const styleName = PRESETS[S.type][S.style].name;
+  const qtyLabel  = S.type === 'pizza'
+    ? `${S.balls} × ${S.ballWeight}g`
+    : `${S.focacciaWeight}g`;
+  document.getElementById('results-title').textContent = `${styleName} — ${qtyLabel}`;
+
+  // Rows
+  document.getElementById('r-flour').textContent = fmt(R.flour);
+  document.getElementById('r-water').textContent = fmt(R.water);
+  document.getElementById('r-salt').textContent  = fmt(R.salt);
+  document.getElementById('r-oil').textContent   = fmt(R.oil);
+  document.getElementById('r-sugar').textContent = fmt(R.sugar);
+  document.getElementById('r-yeast').textContent = fmt(R.yeast);
+  document.getElementById('r-total').textContent = fmt(R.total);
+
+  document.getElementById('p-water').textContent = S.hydration + '%';
+  document.getElementById('p-salt').textContent  = S.salt + '%';
+  document.getElementById('p-oil').textContent   = S.oil + '%';
+  document.getElementById('p-sugar').textContent = S.sugar + '%';
+  document.getElementById('p-yeast').textContent = S.yeastType === 'sourdough'
+    ? S.starterPct + '%'
+    : S.yeastPct.toFixed(2) + '%';
+
+  // Bars (relative to flour = 100%)
+  document.getElementById('bar-water').style.width = barPct(R.water, R.flour);
+  document.getElementById('bar-salt').style.width  = barPct(R.salt,  R.flour);
+  document.getElementById('bar-oil').style.width   = barPct(R.oil,   R.flour);
+  document.getElementById('bar-sugar').style.width = barPct(R.sugar, R.flour);
+  document.getElementById('bar-yeast').style.width = barPct(R.yeast, R.flour);
+
+  // Hide zero rows
+  document.getElementById('row-oil').classList.toggle('hidden',   R.oil   < 0.01);
+  document.getElementById('row-sugar').classList.toggle('hidden', R.sugar < 0.01);
+
+  // Yeast label
+  document.getElementById('yeast-label').textContent = R.yeastDisplayLabel;
+
+  // Timing note
+  document.getElementById('timing-note').innerHTML = yeastNote();
+
+  // Pizza total label
+  if (S.type === 'pizza') {
+    document.getElementById('pizza-total-label').innerHTML =
+      'Total <strong>' + fmt(R.total) + '</strong>';
+  } else {
+    document.getElementById('focaccia-total-label').innerHTML =
+      'Total <strong>' + fmt(R.total) + '</strong>';
+  }
+}
+
+/* ── Slider helper ───────────────────────────── */
+function updateSliderFill(el) {
+  const min = parseFloat(el.min), max = parseFloat(el.max), val = parseFloat(el.value);
+  el.style.setProperty('--fill', ((val - min) / (max - min) * 100) + '%');
+}
+
+function onSlider(el, key, decimals) {
+  updateSliderFill(el);
+  S[key] = parseFloat(el.value);
+  document.getElementById(key.replace('Pct','') + (key === 'starterPct' ? 'starter' : key === 'yeastPct' ? 'yeast' : '') + '-val').textContent =
+    parseFloat(el.value).toFixed(decimals) + '%';
+  render();
+}
+
+// Fix id mapping for value displays
+function onSlider(el, key, decimals) {
+  updateSliderFill(el);
+  S[key] = parseFloat(el.value);
+  const idMap = {
+    hydration: 'hydration-val',
+    salt:      'salt-val',
+    oil:       'oil-val',
+    sugar:     'sugar-val',
+    yeastPct:  'yeast-val',
+    starterPct:'starter-val',
+  };
+  document.getElementById(idMap[key]).textContent =
+    parseFloat(el.value).toFixed(decimals) + '%';
+  render();
+}
+
+/* ── Type switching ──────────────────────────── */
+function setType(type, btn) {
+  S.type = type;
+  document.querySelectorAll('.bread-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.getElementById('pizza-qty').style.display    = type === 'pizza'    ? 'flex' : 'none';
+  document.getElementById('focaccia-qty').style.display = type === 'focaccia' ? 'flex' : 'none';
+
+  buildPresets();
+  applyPreset(Object.keys(PRESETS[type])[0]);
+}
+
+/* ── Preset rendering ────────────────────────── */
+function buildPresets() {
+  const container = document.getElementById('style-presets');
+  const presets = PRESETS[S.type];
+  container.innerHTML = Object.entries(presets).map(([key, p]) =>
+    `<button class="preset-btn${key === S.style ? ' active' : ''}" onclick="applyPreset('${key}', this)">${p.name}</button>`
+  ).join('');
+}
+
+function applyPreset(key, btn) {
+  S.style = key;
+  const p = PRESETS[S.type][key];
+
+  // Update active button
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      if (b.textContent === p.name) b.classList.add('active');
+    });
+  }
+
+  // Apply values
+  setSlider('hydration-slider', 'hydration', p.hydration, 1, 'hydration-val');
+  setSlider('salt-slider',      'salt',      p.salt,      1, 'salt-val');
+  setSlider('oil-slider',       'oil',       p.oil,       1, 'oil-val');
+  setSlider('sugar-slider',     'sugar',     p.sugar,     1, 'sugar-val');
+  setSlider('yeast-slider',     'yeastPct',  p.yeastPct,  2, 'yeast-val');
+
+  // Ball weight for pizza
+  if (S.type === 'pizza' && p.ballWeight) {
+    S.ballWeight = p.ballWeight;
+    document.getElementById('weight-input').value = p.ballWeight;
+  }
+
+  // Description
+  document.getElementById('preset-desc').textContent = p.desc;
+
+  render();
+}
+
+function setSlider(sliderId, stateKey, value, decimals, valId) {
+  S[stateKey] = value;
+  const el = document.getElementById(sliderId);
+  el.value = value;
+  updateSliderFill(el);
+  document.getElementById(valId).textContent = value.toFixed(decimals) + '%';
+}
+
+/* ── Quantity controls ───────────────────────── */
+function stepBalls(delta) {
+  const input = document.getElementById('balls-input');
+  const next = Math.max(1, Math.min(20, (S.balls + delta)));
+  S.balls = next;
+  input.value = next;
+  render();
+}
+function onBallsInput(v) {
+  S.balls = Math.max(1, parseInt(v) || 1);
+  render();
+}
+function stepWeight(delta) {
+  const input = document.getElementById('weight-input');
+  const next = Math.max(100, Math.min(800, S.ballWeight + delta));
+  S.ballWeight = next;
+  input.value = next;
+  render();
+}
+function onWeightInput(v) {
+  S.ballWeight = Math.max(100, parseInt(v) || 250);
+  render();
+}
+
+function onPanChange(val) {
+  const customField = document.getElementById('custom-weight-field');
+  if (val === 'custom') {
+    customField.style.display = 'flex';
+  } else {
+    customField.style.display = 'none';
+    S.focacciaWeight = parseInt(val);
+    document.getElementById('focaccia-weight').value = val;
+    render();
+  }
+}
+function onFocacciaWeightInput(v) {
+  S.focacciaWeight = Math.max(200, parseInt(v) || 750);
+  render();
+}
+
+/* ── Yeast type switching ────────────────────── */
+function setYeast(type, btn) {
+  S.yeastType = type;
+  document.querySelectorAll('.yeast-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const isSD = type === 'sourdough';
+  document.getElementById('commercial-yeast-row').style.display = isSD ? 'none' : 'grid';
+  document.getElementById('starter-row').style.display           = isSD ? 'grid' : 'none';
+
+  render();
+}
+
+/* ── Copy recipe ─────────────────────────────── */
+function copyRecipe() {
+  const R = calculate();
+  const styleName = PRESETS[S.type][S.style].name;
+  const qtyLine   = S.type === 'pizza'
+    ? `${S.balls} balls × ${S.ballWeight}g`
+    : `${S.focacciaWeight}g total`;
+
+  const row = (label, g, pct) =>
+    label.padEnd(18) + fmt(g).padStart(7) + ('  ' + pct).padStart(8);
+
+  const lines = [
+    `${styleName} ${S.type === 'pizza' ? 'Pizza' : 'Focaccia'} Dough`,
+    qtyLine,
+    '─'.repeat(34),
+    row('Flour',  R.flour, '100%'),
+    row('Water',  R.water, S.hydration + '%'),
+    row('Salt',   R.salt,  S.salt + '%'),
+  ];
+  if (R.oil   > 0.01) lines.push(row('Oil',   R.oil,   S.oil + '%'));
+  if (R.sugar > 0.01) lines.push(row('Sugar', R.sugar, S.sugar + '%'));
+  const yPct = S.yeastType === 'sourdough' ? S.starterPct + '%' : S.yeastPct.toFixed(2) + '%';
+  lines.push(row(R.yeastDisplayLabel, R.yeast, yPct));
+  lines.push('─'.repeat(34));
+  lines.push(row('Total', R.total, ''));
+
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+/* ── Init ────────────────────────────────────── */
+buildPresets();
+applyPreset('neapolitan');
+// initialise all slider fills
+['hydration-slider','salt-slider','oil-slider','sugar-slider','yeast-slider','starter-slider'].forEach(id => {
+  updateSliderFill(document.getElementById(id));
+});
+</script>
