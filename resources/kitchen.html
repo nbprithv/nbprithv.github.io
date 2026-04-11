@@ -1,0 +1,735 @@
+---
+layout: default
+title: Weeknight Kitchen
+permalink: /resources/kitchen/
+---
+
+<style>
+/* ── Kitchen accent tokens ─────────────────── */
+:root {
+  --k-veg-bg:    #E1F5EE;
+  --k-veg-text:  #0F6E56;
+  --k-veg-bdr:   #9FE1CB;
+  --k-spice-bg:  #F5E8DF;
+  --k-spice:     #B85C2A;
+  --k-gold-bg:   #F7F0DF;
+  --k-gold:      #BA7517;
+}
+[data-theme="dark"] {
+  --k-veg-bg:    #085041;
+  --k-veg-text:  #5DCAA5;
+  --k-veg-bdr:   #0F6E56;
+  --k-spice-bg:  #2E1508;
+  --k-spice:     #D4845A;
+  --k-gold-bg:   #2C1E06;
+  --k-gold:      #D4A840;
+}
+
+/* ── Page header ────────────────────────────── */
+.kitch-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 1.5rem;
+  transition: color 0.15s;
+}
+.kitch-back:hover { color: var(--fg-muted); }
+
+.kitch-meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.07em;
+  color: var(--fg-faint);
+  margin-top: 0.3rem;
+  margin-bottom: 2rem;
+}
+
+/* ── Tab navigation ─────────────────────────── */
+.kitch-tabs {
+  display: flex;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: 0.25rem;
+}
+.kitch-tab {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  background: none;
+  border: none;
+  border-bottom: 1.5px solid transparent;
+  padding: 0.55rem 1.1rem 0.7rem;
+  margin-bottom: -0.5px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.kitch-tab:hover { color: var(--fg-muted); }
+.kitch-tab.active {
+  color: var(--fg);
+  border-bottom-color: var(--teal);
+}
+
+/* ── Sections ───────────────────────────────── */
+.k-section { display: none; }
+.k-section.active { display: block; }
+
+.k-section-sub {
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  margin-bottom: 1.75rem;
+}
+
+/* ── Recipe cards ───────────────────────────── */
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+.recipe-card {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.12s;
+}
+.recipe-card:hover {
+  border-color: var(--border-mid);
+  background: var(--bg-card);
+  transform: translateY(-1px);
+}
+
+.recipe-card-header { padding: 1.1rem 1.25rem 0; }
+
+.recipe-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 0.5px solid transparent;
+  margin-bottom: 0.55rem;
+}
+.tag-veg    { background: var(--k-veg-bg);   color: var(--k-veg-text);  border-color: var(--k-veg-bdr); }
+.tag-pantry { background: var(--k-gold-bg);  color: var(--k-gold); }
+.tag-quick  { background: var(--k-spice-bg); color: var(--k-spice); }
+
+.recipe-card h3 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.recipe-card-desc {
+  font-size: 0.81rem;
+  color: var(--fg-muted);
+  padding: 0.45rem 1.25rem 0.9rem;
+  line-height: 1.55;
+}
+
+.recipe-meta {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.65rem 1.25rem;
+  border-top: 0.5px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.03em;
+  color: var(--fg-faint);
+}
+
+/* ── Modal ──────────────────────────────────── */
+.k-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.k-modal-overlay.open { display: flex; }
+
+.k-modal {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 580px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.k-modal-top {
+  background: var(--bg-surface);
+  border-bottom: 0.5px solid var(--border);
+  padding: 1.5rem 1.75rem 1.25rem;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.k-modal-top h2 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--fg);
+  padding-right: 2rem;
+  margin-bottom: 0.2rem;
+}
+.k-modal-top-meta {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  color: var(--fg-faint);
+}
+
+.k-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  color: var(--fg-muted);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.k-modal-close:hover { background: var(--border-mid); color: var(--fg); }
+
+.k-modal-body { padding: 1.5rem 1.75rem 1.75rem; }
+
+.k-modal-section { margin-bottom: 1.5rem; }
+.k-modal-section:last-child { margin-bottom: 0; }
+
+.k-modal-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  padding-bottom: 0.4rem;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+
+.ingredients-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.ing-pill {
+  font-size: 0.78rem;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  color: var(--fg);
+}
+.ing-pill.optional {
+  border-style: dashed;
+  color: var(--fg-muted);
+}
+
+.steps-list {
+  list-style: none;
+  counter-reset: steps;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.steps-list li {
+  counter-increment: steps;
+  display: flex;
+  gap: 0.85rem;
+  font-size: 0.87rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+.steps-list li::before {
+  content: counter(steps);
+  min-width: 22px;
+  height: 22px;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  color: var(--fg-faint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Pantry ─────────────────────────────────── */
+.pantry-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.75rem;
+}
+.filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border-mid);
+  background: var(--bg-surface);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--fg-faint); color: var(--fg); }
+.filter-btn.active {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+.store-section { margin-bottom: 2.25rem; }
+
+.store-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.store-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--fg);
+}
+.store-count {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--fg-faint);
+  margin-left: auto;
+  letter-spacing: 0.04em;
+}
+.store-badge {
+  font-family: var(--font-mono);
+  font-size: 0.57rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+.store-costco { background: #e8eef7; color: #2a4a8a; }
+.store-tj     { background: #f7e8e8; color: #8a2a2a; }
+.store-wf     { background: #e8f2e8; color: #2a5c2a; }
+[data-theme="dark"] .store-costco { background: #0e1a2e; color: #6a8ac4; }
+[data-theme="dark"] .store-tj     { background: #2e0e0e; color: #c46a6a; }
+[data-theme="dark"] .store-wf     { background: #0e2010; color: #6ac46a; }
+
+.category-block { margin-bottom: 0.9rem; }
+.category-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 0.45rem;
+}
+.items-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.item-chip {
+  font-size: 0.79rem;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  color: var(--fg-muted);
+}
+</style>
+
+<main>
+
+  <a href="/resources" class="kitch-back">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7.5 2L3.5 6l4 4"/>
+    </svg>
+    Resources
+  </a>
+
+  <div class="page-title">Weeknight Kitchen</div>
+  <p class="kitch-meta">7 recipes · 3 stores · 20–30 minutes</p>
+
+  <div class="kitch-tabs">
+    <button class="kitch-tab active" onclick="showSection('recipes', this)">Recipes</button>
+    <button class="kitch-tab"        onclick="showSection('pantry',  this)">Pantry</button>
+  </div>
+
+  <!-- RECIPES -->
+  <div id="recipes" class="k-section active">
+    <p class="k-section-sub">Click any card to see the full recipe and steps.</p>
+    <div class="recipes-grid" id="recipes-grid"></div>
+  </div>
+
+  <!-- PANTRY -->
+  <div id="pantry" class="k-section">
+    <p class="k-section-sub">Everything routinely stocked, organized by store and category.</p>
+    <div class="pantry-filters">
+      <button class="filter-btn active" onclick="filterStore('all', this)">All stores</button>
+      <button class="filter-btn"        onclick="filterStore('costco', this)">Costco</button>
+      <button class="filter-btn"        onclick="filterStore('tj', this)">Trader Joe's</button>
+      <button class="filter-btn"        onclick="filterStore('wf', this)">Whole Foods</button>
+    </div>
+    <div id="pantry-content"></div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="k-modal-overlay" id="k-modal" onclick="closeModal(event)">
+  <div class="k-modal">
+    <div class="k-modal-top">
+      <button class="k-modal-close" onclick="closeModalDirect()">✕</button>
+      <h2 id="modal-title"></h2>
+      <div class="k-modal-top-meta" id="modal-meta"></div>
+    </div>
+    <div class="k-modal-body">
+      <div class="k-modal-section">
+        <div class="k-modal-label">Ingredients</div>
+        <div class="ingredients-grid" id="modal-ingredients"></div>
+      </div>
+      <div class="k-modal-section" id="modal-optional-wrap" style="display:none">
+        <div class="k-modal-label">Optional additions</div>
+        <div class="ingredients-grid" id="modal-optional"></div>
+      </div>
+      <div class="k-modal-section">
+        <div class="k-modal-label">Steps</div>
+        <ol class="steps-list" id="modal-steps"></ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const recipes = [
+  {
+    id: 1,
+    name: "Veggie Enchiladas",
+    tag: "veg",
+    tagLabel: "Vegetarian",
+    time: "25–30 min",
+    servings: "4 servings",
+    description: "Roasted Normandy veggies, black beans, and cheese rolled in soft tortillas with enchilada sauce.",
+    ingredients: ["Bell peppers", "Onion", "Frozen Normandy veggies", "Avocado oil", "Taco seasoning", "Salt & pepper", "Canned black beans", "Cheese", "Soft tortillas", "Enchilada sauce"],
+    optional: ["Extra cheese for topping"],
+    steps: [
+      "Defrost the Normandy vegetables.",
+      "Heat avocado oil in a pan over medium-high. Sauté bell peppers and onion for 3–4 minutes until softened.",
+      "Add the defrosted Normandy veggies. Season with taco seasoning, salt, and pepper. Cook another 3–4 minutes.",
+      "Stir in the canned black beans. Adjust seasoning to taste. Add cheese to the filling and mix to bind.",
+      "Wrap filling in soft tortillas. For a baked version: layer tortillas in a baking dish, add filling, cover with more tortillas.",
+      "Pour enchilada sauce over the top. Cover dish with foil. Bake at 350°F for 10–15 minutes.",
+      "Serve hot, topped with extra cheese if desired."
+    ]
+  },
+  {
+    id: 2,
+    name: "Thai Curry with Tofu",
+    tag: "veg",
+    tagLabel: "Vegetarian",
+    time: "20–25 min",
+    servings: "3–4 servings",
+    description: "Sautéed Asian veggies and tofu simmered in Thai curry sauce, served over brown rice.",
+    ingredients: ["Frozen Asian veggies", "Oil", "Soft tofu", "TJ's Thai curry sauce", "Brown rice", "Salt"],
+    optional: ["Frozen edamame", "TJ's frozen gyoza"],
+    steps: [
+      "Cook brown rice according to package directions simultaneously.",
+      "Defrost the frozen Asian veggies.",
+      "Heat oil in a pan or wok over medium-high. Sauté the defrosted veggies for 3–4 minutes.",
+      "Add frozen edamame if using. Stir to combine.",
+      "Pour in the Thai curry sauce. Add the soft tofu, gently stirring to avoid breaking it up too much.",
+      "Add frozen gyoza to the curry if using.",
+      "Let everything simmer together for 6–10 minutes. Season with salt if needed.",
+      "Serve over the cooked brown rice."
+    ]
+  },
+  {
+    id: 3,
+    name: "Coconut Veggie Curry",
+    tag: "veg",
+    tagLabel: "Vegetarian",
+    time: "25–30 min",
+    servings: "4 servings",
+    description: "Normandy veggies and legumes simmered in spiced coconut milk — a warm, flexible weeknight staple.",
+    ingredients: ["Frozen Normandy veggies", "Oil", "Salt & pepper", "Cumin powder", "Coriander powder", "Turmeric", "Chili powder", "Canned beans or chickpeas or white beans", "Coconut milk"],
+    optional: ["Frozen edamame", "Soft tofu", "Baby spinach"],
+    steps: [
+      "Defrost the Normandy vegetables.",
+      "Heat oil in a large pan over medium. Add the veggies and sauté for 3–4 minutes.",
+      "Season with salt, pepper, cumin, coriander, turmeric, and chili powder. Stir well for 1–2 minutes.",
+      "Add canned beans (black beans, chickpeas, or white beans — your choice).",
+      "Pour in the coconut milk. Stir to combine and bring to a gentle simmer.",
+      "Add tofu or edamame if using for extra protein.",
+      "Stir in baby spinach in the last 2 minutes if using. Simmer 5–8 more minutes until everything is heated through.",
+      "Taste and adjust seasoning. Serve over rice or with naan."
+    ]
+  },
+  {
+    id: 4,
+    name: "Peanut Noodles",
+    tag: "quick",
+    tagLabel: "30 min",
+    time: "20 min",
+    servings: "2–3 servings",
+    description: "Noodles tossed in a punchy peanut-ginger sauce with sautéed Asian vegetables.",
+    ingredients: ["Maggi noodles", "Frozen Asian veggies", "Peanut butter", "Soy sauce", "Ginger (fresh or paste)", "TJ's Chili crunch oil", "Rice vinegar", "Oil"],
+    optional: [],
+    steps: [
+      "Cook noodles according to package directions. Reserve a splash of cooking water before draining.",
+      "While noodles cook, defrost Asian veggies and sauté in oil over medium-high for 3–4 minutes.",
+      "Whisk together peanut butter, soy sauce, ginger, chili crunch oil, and rice vinegar to make the sauce. Thin with a little water if needed.",
+      "Add drained noodles to the pan with the veggies. Pour peanut sauce over everything.",
+      "Toss well over medium heat for 1–2 minutes until coated and heated through.",
+      "Serve immediately."
+    ]
+  },
+  {
+    id: 5,
+    name: "Quick Tomato Pasta",
+    tag: "quick",
+    tagLabel: "30 min",
+    time: "20–25 min",
+    servings: "3–4 servings",
+    description: "Al dente protein pasta in a quick spiced tomato sauce with optional greens.",
+    ingredients: ["Canned tomato sauce", "Protein pasta", "Salt & pepper", "Onion powder", "Chili flakes", "Oregano", "Olive oil"],
+    optional: ["Broccoli", "Baby spinach"],
+    steps: [
+      "Heat olive oil in a saucepan. Add canned tomato sauce and season with salt, pepper, onion powder, chili flakes, and oregano.",
+      "Simmer the sauce over low heat for 8–10 minutes to develop flavor.",
+      "Bring a separate pot of salted water to a boil. Cook protein pasta to al dente per package directions.",
+      "If using broccoli, add it to the pasta water in the last 3 minutes of cooking.",
+      "Drain pasta (and broccoli) and add directly to the sauce. Stir in baby spinach if using.",
+      "Let everything simmer together for 4 minutes. Taste and adjust seasoning before serving."
+    ]
+  },
+  {
+    id: 6,
+    name: "Miso Noodle Soup",
+    tag: "veg",
+    tagLabel: "Vegetarian",
+    time: "25–30 min",
+    servings: "3–4 servings",
+    description: "A hearty Japanese-inspired broth with mushrooms, tofu, Asian veggies, and noodles.",
+    ingredients: ["Olive oil", "Onion", "Salt", "Mushrooms", "Broth", "Frozen Asian veggies", "Soft tofu", "Noodles", "Sesame oil", "Soy sauce"],
+    optional: [],
+    steps: [
+      "Heat 2 tbsp olive oil in a large pot over medium. Add onion and a pinch of salt. Sauté for 3 minutes.",
+      "Add mushrooms and stir. Sauté 10–15 minutes until browned and most of the moisture has cooked off.",
+      "Add broth and bring to a boil.",
+      "Add the frozen Asian veggies. Reduce heat and simmer for 5 minutes.",
+      "Add soft tofu. Cook another 2–3 minutes just until heated through.",
+      "Add noodles to the pot and cook per package directions.",
+      "Remove from heat. Season with salt to taste. Ladle into bowls and finish with a splash of sesame oil and soy sauce."
+    ]
+  },
+  {
+    id: 7,
+    name: "Homemade Hummus",
+    tag: "pantry",
+    tagLabel: "Pantry",
+    time: "10 min",
+    servings: "6–8 servings",
+    description: "Ultra-creamy hummus with tahini and silken tofu — great as a dip, spread, or meal base.",
+    ingredients: ["Canned chickpeas", "Tahini", "Soft tofu", "Olive oil", "Cold water", "Salt"],
+    optional: ["Lemon juice", "Garlic"],
+    steps: [
+      "Drain and rinse the canned chickpeas.",
+      "Add chickpeas, tahini, soft tofu, and a generous pinch of salt to a food processor.",
+      "Add lemon juice and garlic if using.",
+      "Start blending. With the processor running, drizzle in cold water and olive oil until you reach your preferred consistency.",
+      "Taste and adjust salt. Blend another 30 seconds for extra creaminess.",
+      "Serve with olive oil drizzled on top and pita bread or veggies on the side."
+    ]
+  }
+];
+
+const pantryData = {
+  costco: {
+    label: "Costco",
+    colorClass: "store-costco",
+    categories: {
+      "Canned Foods": ["Coconut milk", "Hummus", "Canned diced tomato", "Canned beans", "Canned chickpeas"],
+      "Dairy & Eggs": ["Eggs", "Whole milk", "Yogurt", "String cheese", "Paneer", "Snacking mozzarella", "Greek yogurt", "Butter", "Cabot 3 cheese", "Feta block", "Tillamook cracker cheese"],
+      "Breads & Cereals": ["Bread", "Oatmeal"],
+      "Proteins": ["Tofu"],
+      "Oils & Dressings": ["Avocado oil", "Olive oil", "Vegetable oil", "Vinegar"],
+      "Pasta, Rice & Grains": ["Quinoa", "Pasta", "Salted peanuts", "Rice noodles"],
+      "Produce": ["Spring mix", "Spinach", "Blueberries", "Pear/peach", "Bell peppers", "Tomato", "Avocado", "Cucumbers", "Banana", "Sweet potato", "Green beans", "Cauliflower florets", "Watermelon", "Brussels sprouts", "Onion", "Potato", "Grapes", "Oranges", "Blackberries", "Lemons", "Cherry tomatoes", "Salad kits", "Strawberries"],
+      "Sauces & Condiments": ["Peanut butter", "Almond butter", "Honey", "Agave syrup", "Ketchup", "Jelly", "Maple syrup", "Soy sauce", "Tapatio"],
+      "Spices": ["Black pepper", "Chili powder", "Taco seasoning", "Everything bagel seasoning"],
+      "Frozen": ["Frozen Asian veggies", "Frozen Normandy veggies"]
+    }
+  },
+  tj: {
+    label: "Trader Joe's",
+    colorClass: "store-tj",
+    categories: {
+      "Baking": ["Pancake/waffle mix", "All purpose flour", "Nutritional yeast", "Cocoa powder", "Baking soda", "Pizza dough", "Yeast", "White sugar"],
+      "Spices": ["Tahini", "Harissa", "Parsley"],
+      "Sauces & Condiments": ["Italian chili paste", "Sweet chili sauce", "Pasta sauce", "Simmer sauce", "Pesto", "Garlic spread", "Korean chili sauce", "Stir fry sauce", "Sriracha", "Yellow curry sauce", "Ginger sauce", "Sweet & spicy sauce", "Thai curry sauce", "Enchilada sauce"],
+      "Produce": ["Ginger", "Carrot", "Tomato", "Bell peppers", "Dill", "Zucchini", "Cilantro", "Garlic", "Jalapeño", "Spinach", "Lemon", "Cauliflower", "Potato", "Beet root", "Organic green beans", "Sweet potato", "Purple sweet potato", "Eggplant", "Mint", "Red grapes", "Avocado", "Apples", "Banana", "Red onion"],
+      "Dairy & Eggs": ["Whole milk", "Eggs", "Tofu", "Plain whole milk yogurt", "Cottage cheese", "Mild cheddar", "Mozzarella", "Cream cheese", "Ghee", "Butter", "Marinara sauce"],
+      "Breads & Cereals": ["Pita bread", "Naan", "Focaccia", "Cheerios", "Corn flakes", "Granola mix", "Tortilla", "White bread", "Mini bagel", "Sweet brioche buns", "Flat bread"],
+      "Canned Foods": ["Hummus", "Olives", "Pesto", "Canned chickpeas", "Sun dried tomatoes", "Coconut milk", "Pickles", "Hot & sweet jalapeños"],
+      "Pasta, Rice & Grains": ["Peanuts", "Pasta", "Macaroni", "Canned white beans"],
+      "Oils": ["Coconut oil", "Vinegar", "Chili crunch oil"],
+      "Frozen": ["Frozen wantons", "Gyoza"]
+    }
+  },
+  wf: {
+    label: "Whole Foods",
+    colorClass: "store-wf",
+    categories: {
+      "Produce": ["Cabbage", "Cauliflower", "Carrots", "Onion", "Ginger", "Green beans", "Eggplant", "Cilantro", "Green chilies", "Potatoes", "Broccoli", "Spinach", "Sweet potato", "Mandarin oranges", "Salad mix", "Apple", "Strawberry", "Avocado", "Mango", "Zucchini", "Oranges", "Lemons", "Green plantain", "Butternut squash", "Pomegranate", "Parsley", "Edamame", "Shallots", "Grapes"],
+      "Frozen": ["Frozen fries", "Frozen tater tots", "Frozen peas", "Frozen okra", "Frozen green beans", "Frozen broccoli", "Frozen spinach", "Frozen chicken fingers", "Frozen pastry sheets"],
+      "Sauces & Condiments": ["Jelly", "Nut butter", "Marinara sauce", "Honey"],
+      "Breads & Cereals": ["Bread", "Cheerios", "Bagel", "Flour tortilla", "Pita bread", "Tortilla"],
+      "Spices": ["Cloves (whole)"],
+      "Canned Foods": ["Capers", "Seedless green olives", "Broth"],
+      "Seafood": ["Salmon"],
+      "Pasta, Rice & Grains": ["Arborio rice", "Orzo", "Walnuts / hazelnuts"],
+      "Meat": ["Chicken breast"]
+    }
+  }
+};
+
+function showSection(id, btn) {
+  document.querySelectorAll('.k-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.kitch-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'pantry') renderPantry('all');
+}
+
+function getTagClass(tag) {
+  return tag === 'veg' ? 'tag-veg' : tag === 'pantry' ? 'tag-pantry' : 'tag-quick';
+}
+
+function renderRecipes() {
+  const grid = document.getElementById('recipes-grid');
+  grid.innerHTML = recipes.map(r => `
+    <div class="recipe-card" onclick="openRecipe(${r.id})">
+      <div class="recipe-card-header">
+        <span class="recipe-tag ${getTagClass(r.tag)}">${r.tagLabel}</span>
+        <h3>${r.name}</h3>
+      </div>
+      <p class="recipe-card-desc">${r.description}</p>
+      <div class="recipe-meta">
+        <span>${r.time}</span>
+        <span>${r.servings}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  document.getElementById('modal-title').textContent = r.name;
+  document.getElementById('modal-meta').textContent = r.time + ' · ' + r.servings;
+  document.getElementById('modal-ingredients').innerHTML = r.ingredients
+    .map(i => `<span class="ing-pill">${i}</span>`).join('');
+
+  const optWrap = document.getElementById('modal-optional-wrap');
+  if (r.optional && r.optional.length) {
+    optWrap.style.display = 'block';
+    document.getElementById('modal-optional').innerHTML = r.optional
+      .map(i => `<span class="ing-pill optional">${i}</span>`).join('');
+  } else {
+    optWrap.style.display = 'none';
+  }
+
+  document.getElementById('modal-steps').innerHTML = r.steps
+    .map(s => `<li>${s}</li>`).join('');
+
+  document.getElementById('k-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('k-modal')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('k-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderPantry(storeFilter) {
+  const container = document.getElementById('pantry-content');
+  const stores = storeFilter === 'all' ? Object.keys(pantryData) : [storeFilter];
+  container.innerHTML = stores.map(key => {
+    const store = pantryData[key];
+    const totalItems = Object.values(store.categories).flat().length;
+    const categoriesHTML = Object.entries(store.categories).map(([cat, items]) => `
+      <div class="category-block">
+        <div class="category-label">${cat}</div>
+        <div class="items-wrap">
+          ${items.map(i => `<span class="item-chip">${i}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+    return `
+      <div class="store-section" data-store="${key}">
+        <div class="store-header">
+          <span class="store-name">${store.label}</span>
+          <span class="store-badge ${store.colorClass}">${store.label}</span>
+          <span class="store-count">${totalItems} items</span>
+        </div>
+        ${categoriesHTML}
+      </div>
+    `;
+  }).join('');
+}
+
+function filterStore(store, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPantry(store);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalDirect();
+});
+
+renderRecipes();
+</script>
