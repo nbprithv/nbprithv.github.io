@@ -155,7 +155,7 @@ permalink: /resources/kitchen/
   color: var(--fg-faint);
 }
 
-/* ── Modal ──────────────────────────────────── */
+/* ── Recipe modal ───────────────────────────── */
 .k-modal-overlay {
   display: none;
   position: fixed;
@@ -289,7 +289,36 @@ permalink: /resources/kitchen/
   margin-top: 2px;
 }
 
-/* ── Pantry ─────────────────────────────────── */
+/* ── Pantry search ──────────────────────────── */
+.pantry-search-wrap {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.pantry-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-faint);
+  pointer-events: none;
+  display: flex;
+}
+.pantry-search {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--fg);
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-mid);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.9rem 0.55rem 2.25rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.pantry-search:focus { border-color: var(--teal-mid); }
+.pantry-search::placeholder { color: var(--fg-faint); }
+
+/* ── Pantry store filters ────────────────────── */
 .pantry-filters {
   display: flex;
   flex-wrap: wrap;
@@ -316,6 +345,7 @@ permalink: /resources/kitchen/
   border-color: var(--fg);
 }
 
+/* ── Pantry store sections ───────────────────── */
 .store-section { margin-bottom: 2.25rem; }
 
 .store-header {
@@ -368,14 +398,216 @@ permalink: /resources/kitchen/
   flex-wrap: wrap;
   gap: 0.35rem;
 }
+
+/* ── Item chips (selectable) ─────────────────── */
 .item-chip {
+  font-family: var(--font-sans);
   font-size: 0.79rem;
   background: var(--bg-surface);
   border: 0.5px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 3px 10px;
   color: var(--fg-muted);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  user-select: none;
 }
+.item-chip:hover {
+  border-color: var(--border-mid);
+  color: var(--fg);
+}
+.item-chip.selected {
+  background: var(--teal-light);
+  border-color: var(--teal-border);
+  color: var(--teal);
+}
+
+.pantry-no-results {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--fg-faint);
+  padding: 0.25rem 0 0.75rem;
+}
+
+/* ── Floating selection tray ─────────────────── */
+.prompt-tray {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: var(--fg);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem 0.9rem 0.75rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.22);
+  z-index: 90;
+  transition: opacity 0.2s, transform 0.2s;
+  min-width: 260px;
+  max-width: 500px;
+}
+.prompt-tray.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(10px);
+}
+.prompt-tray-count {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  color: var(--bg);
+  opacity: 0.55;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.prompt-tray-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--bg);
+  opacity: 0.8;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.prompt-tray-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.tray-btn {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  border: none;
+  line-height: 1;
+}
+.tray-btn-clear {
+  background: transparent;
+  color: var(--bg);
+  opacity: 0.55;
+  border: 0.5px solid rgba(255,255,255,0.2) !important;
+}
+.tray-btn-clear:hover { opacity: 0.9; }
+.tray-btn-generate {
+  background: var(--bg);
+  color: var(--fg);
+}
+.tray-btn-generate:hover { opacity: 0.85; }
+
+/* ── Prompt output modal ─────────────────────── */
+.prompt-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 210;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.prompt-modal-overlay.open { display: flex; }
+
+.prompt-modal {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 560px;
+  width: 100%;
+}
+
+.prompt-modal-top {
+  background: var(--bg-surface);
+  border-bottom: 0.5px solid var(--border);
+  padding: 1.1rem 1.5rem;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.prompt-modal-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.prompt-modal-body { padding: 1.25rem 1.5rem 1.5rem; }
+
+.prompt-hint {
+  font-size: 0.78rem;
+  color: var(--fg-faint);
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+}
+
+.prompt-textarea {
+  width: 100%;
+  height: 190px;
+  font-family: var(--font-mono);
+  font-size: 0.77rem;
+  line-height: 1.65;
+  color: var(--fg);
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  resize: none;
+  outline: none;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s;
+}
+.prompt-textarea:focus { border-color: var(--border-mid); }
+
+.prompt-modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.prompt-copy-btn {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+  background: var(--fg);
+  color: var(--bg);
+  transition: opacity 0.15s, background 0.2s;
+}
+.prompt-copy-btn:hover { opacity: 0.85; }
+.prompt-copy-btn.copied {
+  background: var(--teal);
+}
+
+.prompt-close-btn {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 0.5px solid var(--border-mid);
+  background: transparent;
+  color: var(--fg-muted);
+  transition: border-color 0.15s, color 0.15s;
+}
+.prompt-close-btn:hover { border-color: var(--fg-faint); color: var(--fg); }
+
+/* add padding to pantry section so tray doesn't overlap content */
+#pantry.k-section.active { padding-bottom: 5rem; }
 </style>
 
 <main>
@@ -403,19 +635,46 @@ permalink: /resources/kitchen/
 
   <!-- PANTRY -->
   <div id="pantry" class="k-section">
-    <p class="k-section-sub">Everything routinely stocked, organized by store and category.</p>
-    <div class="pantry-filters">
-      <button class="filter-btn active" onclick="filterStore('all', this)">All stores</button>
-      <button class="filter-btn"        onclick="filterStore('costco', this)">Costco</button>
-      <button class="filter-btn"        onclick="filterStore('tj', this)">Trader Joe's</button>
-      <button class="filter-btn"        onclick="filterStore('wf', this)">Whole Foods</button>
+    <p class="k-section-sub">Select ingredients you have on hand, then generate a recipe prompt for any AI.</p>
+
+    <div class="pantry-search-wrap">
+      <span class="pantry-search-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </span>
+      <input
+        class="pantry-search"
+        type="search"
+        placeholder="Search ingredients…"
+        oninput="applySearch(this.value)"
+        autocomplete="off"
+      >
     </div>
+
+    <div class="pantry-filters">
+      <button class="filter-btn active" onclick="filterStore('all',    this)">All stores</button>
+      <button class="filter-btn"        onclick="filterStore('costco', this)">Costco</button>
+      <button class="filter-btn"        onclick="filterStore('tj',     this)">Trader Joe's</button>
+      <button class="filter-btn"        onclick="filterStore('wf',     this)">Whole Foods</button>
+    </div>
+
     <div id="pantry-content"></div>
   </div>
 
 </main>
 
-<!-- MODAL -->
+<!-- Floating selection tray -->
+<div class="prompt-tray hidden" id="prompt-tray">
+  <span class="prompt-tray-count" id="tray-count">0 selected</span>
+  <span class="prompt-tray-label" id="tray-label"></span>
+  <div class="prompt-tray-actions">
+    <button class="tray-btn tray-btn-clear"    onclick="clearSelection()">Clear</button>
+    <button class="tray-btn tray-btn-generate" onclick="openPromptModal()">Generate prompt</button>
+  </div>
+</div>
+
+<!-- RECIPE MODAL -->
 <div class="k-modal-overlay" id="k-modal" onclick="closeModal(event)">
   <div class="k-modal">
     <div class="k-modal-top">
@@ -440,7 +699,26 @@ permalink: /resources/kitchen/
   </div>
 </div>
 
+<!-- PROMPT MODAL -->
+<div class="prompt-modal-overlay" id="prompt-modal" onclick="closePromptModal(event)">
+  <div class="prompt-modal">
+    <div class="prompt-modal-top">
+      <span class="prompt-modal-title">AI Recipe Prompt</span>
+      <button class="k-modal-close" onclick="closePromptModalDirect()">✕</button>
+    </div>
+    <div class="prompt-modal-body">
+      <p class="prompt-hint">Copy this prompt and paste it into Claude, ChatGPT, or any AI of your choice.</p>
+      <textarea class="prompt-textarea" id="prompt-text" readonly></textarea>
+      <div class="prompt-modal-actions">
+        <button class="prompt-copy-btn" id="copy-btn" onclick="copyPrompt()">Copy prompt</button>
+        <button class="prompt-close-btn" onclick="closePromptModalDirect()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+/* ── Data ────────────────────────────────────── */
 const recipes = [
   {
     id: 1,
@@ -633,14 +911,23 @@ const pantryData = {
   }
 };
 
+/* ── State ───────────────────────────────────── */
+const selectedIngredients = new Set();
+let currentStoreFilter = 'all';
+let currentSearch = '';
+
+/* ── Section switching ───────────────────────── */
 function showSection(id, btn) {
   document.querySelectorAll('.k-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.kitch-tab').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  if (id === 'pantry') renderPantry('all');
+  if (id === 'pantry') renderPantry(currentStoreFilter);
+  // hide tray when not on pantry tab
+  document.getElementById('prompt-tray').classList.toggle('hidden', id !== 'pantry' || selectedIngredients.size === 0);
 }
 
+/* ── Recipe rendering ────────────────────────── */
 function getTagClass(tag) {
   return tag === 'veg' ? 'tag-veg' : tag === 'pantry' ? 'tag-pantry' : 'tag-quick';
 }
@@ -662,6 +949,7 @@ function renderRecipes() {
   `).join('');
 }
 
+/* ── Recipe modal ────────────────────────────── */
 function openRecipe(id) {
   const r = recipes.find(x => x.id === id);
   document.getElementById('modal-title').textContent = r.name;
@@ -688,26 +976,50 @@ function openRecipe(id) {
 function closeModal(e) {
   if (e.target === document.getElementById('k-modal')) closeModalDirect();
 }
-
 function closeModalDirect() {
   document.getElementById('k-modal').classList.remove('open');
   document.body.style.overflow = '';
 }
 
+/* ── Pantry rendering ────────────────────────── */
 function renderPantry(storeFilter) {
+  currentStoreFilter = storeFilter;
   const container = document.getElementById('pantry-content');
   const stores = storeFilter === 'all' ? Object.keys(pantryData) : [storeFilter];
+  const q = currentSearch.toLowerCase().trim();
+
   container.innerHTML = stores.map(key => {
     const store = pantryData[key];
     const totalItems = Object.values(store.categories).flat().length;
-    const categoriesHTML = Object.entries(store.categories).map(([cat, items]) => `
-      <div class="category-block">
-        <div class="category-label">${cat}</div>
-        <div class="items-wrap">
-          ${items.map(i => `<span class="item-chip">${i}</span>`).join('')}
-        </div>
-      </div>
-    `).join('');
+
+    const categoriesHTML = Object.entries(store.categories).map(([cat, items]) => {
+      const visible = q ? items.filter(i => i.toLowerCase().includes(q)) : items;
+      if (!visible.length) return '';
+      return `
+        <div class="category-block">
+          <div class="category-label">${cat}</div>
+          <div class="items-wrap">
+            ${visible.map(i => {
+              const sel = selectedIngredients.has(i);
+              const enc = encodeURIComponent(i);
+              return `<button class="item-chip${sel ? ' selected' : ''}" data-item="${enc}">${i}</button>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }).join('');
+
+    const hasContent = categoriesHTML.trim().length > 0;
+    if (!hasContent) {
+      return q ? `
+        <div class="store-section" data-store="${key}">
+          <div class="store-header">
+            <span class="store-name">${store.label}</span>
+            <span class="store-badge ${store.colorClass}">${store.label}</span>
+          </div>
+          <p class="pantry-no-results">No items match "${q}".</p>
+        </div>` : '';
+    }
+
     return `
       <div class="store-section" data-store="${key}">
         <div class="store-header">
@@ -716,10 +1028,24 @@ function renderPantry(storeFilter) {
           <span class="store-count">${totalItems} items</span>
         </div>
         ${categoriesHTML}
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
+
+/* Event delegation for chip clicks */
+document.getElementById('pantry-content').addEventListener('click', e => {
+  const chip = e.target.closest('.item-chip');
+  if (!chip) return;
+  const item = decodeURIComponent(chip.dataset.item);
+  if (selectedIngredients.has(item)) {
+    selectedIngredients.delete(item);
+    chip.classList.remove('selected');
+  } else {
+    selectedIngredients.add(item);
+    chip.classList.add('selected');
+  }
+  updateTray();
+});
 
 function filterStore(store, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -727,8 +1053,88 @@ function filterStore(store, btn) {
   renderPantry(store);
 }
 
+function applySearch(value) {
+  currentSearch = value;
+  renderPantry(currentStoreFilter);
+}
+
+/* ── Selection tray ──────────────────────────── */
+function updateTray() {
+  const tray  = document.getElementById('prompt-tray');
+  const count = document.getElementById('tray-count');
+  const label = document.getElementById('tray-label');
+  const n     = selectedIngredients.size;
+  const onPantry = document.getElementById('pantry').classList.contains('active');
+
+  if (n === 0 || !onPantry) {
+    tray.classList.add('hidden');
+    return;
+  }
+
+  tray.classList.remove('hidden');
+  count.textContent = n + (n === 1 ? ' selected' : ' selected');
+  const items = [...selectedIngredients];
+  label.textContent = items.slice(0, 4).join(', ') + (items.length > 4 ? ` +${items.length - 4} more` : '');
+}
+
+function clearSelection() {
+  selectedIngredients.clear();
+  // remove selected class from all visible chips
+  document.querySelectorAll('.item-chip.selected').forEach(c => c.classList.remove('selected'));
+  updateTray();
+}
+
+/* ── Prompt modal ────────────────────────────── */
+function openPromptModal() {
+  const items = [...selectedIngredients];
+  const listStr = items.map(i => `- ${i}`).join('\n');
+  const prompt =
+`I have these ingredients available in my pantry:
+
+${listStr}
+
+Please suggest 3–5 weeknight dinner recipes I can make using primarily these ingredients. For each recipe:
+- Keep prep + cook time under 30 minutes where possible
+- Prefer vegetarian options, but include any that work naturally with what I have
+- Include a one-line description, the key ingredients used, and the main cooking steps
+- Note any common pantry staples (salt, oil, water) I might need that aren't listed
+
+Focus on practical, flavourful meals — not elaborate techniques.`;
+
+  document.getElementById('prompt-text').value = prompt;
+  document.getElementById('copy-btn').textContent = 'Copy prompt';
+  document.getElementById('copy-btn').classList.remove('copied');
+  document.getElementById('prompt-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePromptModal(e) {
+  if (e.target === document.getElementById('prompt-modal')) closePromptModalDirect();
+}
+function closePromptModalDirect() {
+  document.getElementById('prompt-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function copyPrompt() {
+  const text = document.getElementById('prompt-text').value;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy prompt';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+/* ── Keyboard shortcuts ──────────────────────── */
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModalDirect();
+  if (e.key === 'Escape') {
+    closeModalDirect();
+    closePromptModalDirect();
+  }
 });
 
 renderRecipes();
