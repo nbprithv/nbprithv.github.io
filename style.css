@@ -98,8 +98,8 @@ ul { list-style: none; }
 .sidebar-bottom { padding-top: 1rem; }
 
 .theme-toggle {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 0.5px solid var(--border);
   background: transparent;
@@ -109,6 +109,9 @@ ul { list-style: none; }
   align-items: center;
   justify-content: center;
   transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+  /* desktop: sits just below the logo, above the nav */
+  margin-bottom: 1.25rem;
 }
 .theme-toggle:hover { background: var(--bg-surface); color: var(--fg); }
 [data-theme="light"] .icon-moon { display: none; }
@@ -661,7 +664,8 @@ time {
   .sidebar-links a { padding: 10px 0; font-size: 0.88rem; border-bottom: 0.5px solid var(--border); }
   .sidebar-links a:last-child { border-bottom: none; }
 
-  .sidebar-bottom { padding-top: 0; padding-left: 0; gap: 0.5rem; margin-left: auto; display: flex; align-items: center; }
+  .theme-toggle { order: 2; margin-left: auto; margin-bottom: 0; width: 44px; height: 44px; }
+  .sidebar-bottom { padding-top: 0; padding-left: 0; margin-left: 0; order: 3; display: flex; align-items: center; }
   .hamburger { display: flex; }
 
   main { padding: 2rem 1.25rem 3rem; }
