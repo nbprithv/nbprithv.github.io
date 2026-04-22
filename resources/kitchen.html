@@ -608,6 +608,52 @@ permalink: /resources/kitchen/
 
 /* add padding to pantry section so tray doesn't overlap content */
 #pantry.k-section.active { padding-bottom: 5rem; }
+
+/* ── Dressing cards ──────────────────────────── */
+.dressings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.dressing-card {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.dressing-card-header {
+  padding: 1.1rem 1.25rem 0.75rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.dressing-card h3 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.dressing-card-body {
+  padding: 0.9rem 1.25rem 1.1rem;
+  font-size: 0.83rem;
+  color: var(--fg-muted);
+  line-height: 1.65;
+}
+
+.dressing-tip {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 0.5px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  letter-spacing: 0.04em;
+  color: var(--fg-faint);
+  line-height: 1.55;
+}
 </style>
 
 <main>
@@ -623,14 +669,53 @@ permalink: /resources/kitchen/
   <p class="kitch-meta">7 recipes · 3 stores · 20–30 minutes</p>
 
   <div class="kitch-tabs">
-    <button class="kitch-tab active" onclick="showSection('recipes', this)">Recipes</button>
-    <button class="kitch-tab"        onclick="showSection('pantry',  this)">Pantry</button>
+    <button class="kitch-tab active" onclick="showSection('recipes',   this)">Recipes</button>
+    <button class="kitch-tab"        onclick="showSection('dressings', this)">Salad Dressings</button>
+    <button class="kitch-tab"        onclick="showSection('pantry',    this)">Pantry</button>
   </div>
 
   <!-- RECIPES -->
   <div id="recipes" class="k-section active">
     <p class="k-section-sub">Click any card to see the full recipe and steps.</p>
     <div class="recipes-grid" id="recipes-grid"></div>
+  </div>
+
+  <!-- SALAD DRESSINGS -->
+  <div id="dressings" class="k-section">
+    <p class="k-section-sub">Simple, from-scratch dressings to keep on rotation.</p>
+    <div class="dressings-grid">
+
+      <div class="dressing-card">
+        <div class="dressing-card-header">
+          <h3>Asian Sesame-Ginger</h3>
+        </div>
+        <div class="dressing-card-body">
+          Whisk together soy sauce, rice vinegar, a small amount of sesame oil, ginger (fresh or paste), a squeeze of honey or agave, and a neutral oil like avocado or vegetable oil. Add a dash of sriracha or chili crunch for heat.
+          <div class="dressing-tip">Ratio: lean heavier on oil and vinegar, lighter on soy so it doesn't overpower.</div>
+        </div>
+      </div>
+
+      <div class="dressing-card">
+        <div class="dressing-card-header">
+          <h3>Italian Herb</h3>
+        </div>
+        <div class="dressing-card-body">
+          Whisk together olive oil and vinegar, a pinch of oregano, chili flakes, garlic (minced or powder), salt, pepper, and a small squeeze of honey to balance. If you have sun-dried tomatoes or olives on hand, finely chop a few in — they add a lot of depth.
+          <div class="dressing-tip">Ratio: 3:1 olive oil to vinegar.</div>
+        </div>
+      </div>
+
+      <div class="dressing-card">
+        <div class="dressing-card-header">
+          <h3>Citrus Vinaigrette</h3>
+        </div>
+        <div class="dressing-card-body">
+          Whisk together fresh lemon or orange juice, olive oil, a small amount of honey or agave to balance the acid, salt, pepper, and a bit of minced shallot if you have it. Optional: a pinch of cumin gives it a warm note that works well on grain bowls and roasted veggie salads.
+          <div class="dressing-tip">Ratio: roughly 2:1 oil to citrus.</div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <!-- PANTRY -->
