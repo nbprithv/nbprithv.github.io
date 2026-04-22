@@ -7,22 +7,28 @@ permalink: /resources/kitchen/
 <style>
 /* ── Kitchen accent tokens ─────────────────── */
 :root {
-  --k-veg-bg:    #E1F5EE;
-  --k-veg-text:  #0F6E56;
-  --k-veg-bdr:   #9FE1CB;
-  --k-spice-bg:  #F5E8DF;
-  --k-spice:     #B85C2A;
-  --k-gold-bg:   #F7F0DF;
-  --k-gold:      #BA7517;
+  --k-veg-bg:       #E1F5EE;
+  --k-veg-text:     #0F6E56;
+  --k-veg-bdr:      #9FE1CB;
+  --k-spice-bg:     #F5E8DF;
+  --k-spice:        #B85C2A;
+  --k-gold-bg:      #F7F0DF;
+  --k-gold:         #BA7517;
+  --k-dessert-bg:   #F2EBF8;
+  --k-dessert-text: #7B3FA8;
+  --k-dessert-bdr:  #D4AEEC;
 }
 [data-theme="dark"] {
-  --k-veg-bg:    #085041;
-  --k-veg-text:  #5DCAA5;
-  --k-veg-bdr:   #0F6E56;
-  --k-spice-bg:  #2E1508;
-  --k-spice:     #D4845A;
-  --k-gold-bg:   #2C1E06;
-  --k-gold:      #D4A840;
+  --k-veg-bg:       #085041;
+  --k-veg-text:     #5DCAA5;
+  --k-veg-bdr:      #0F6E56;
+  --k-spice-bg:     #2E1508;
+  --k-spice:        #D4845A;
+  --k-gold-bg:      #2C1E06;
+  --k-gold:         #D4A840;
+  --k-dessert-bg:   #1E0A2E;
+  --k-dessert-text: #C08AE8;
+  --k-dessert-bdr:  #5C2A8A;
 }
 
 /* ── Page header ────────────────────────────── */
@@ -124,9 +130,10 @@ permalink: /resources/kitchen/
   border: 0.5px solid transparent;
   margin-bottom: 0.55rem;
 }
-.tag-veg    { background: var(--k-veg-bg);   color: var(--k-veg-text);  border-color: var(--k-veg-bdr); }
-.tag-pantry { background: var(--k-gold-bg);  color: var(--k-gold); }
-.tag-quick  { background: var(--k-spice-bg); color: var(--k-spice); }
+.tag-veg     { background: var(--k-veg-bg);      color: var(--k-veg-text);     border-color: var(--k-veg-bdr); }
+.tag-pantry  { background: var(--k-gold-bg);     color: var(--k-gold); }
+.tag-quick   { background: var(--k-spice-bg);    color: var(--k-spice); }
+.tag-dessert { background: var(--k-dessert-bg);  color: var(--k-dessert-text); border-color: var(--k-dessert-bdr); }
 
 .recipe-card h3 {
   font-family: var(--font-serif);
@@ -670,6 +677,7 @@ permalink: /resources/kitchen/
 
   <div class="kitch-tabs">
     <button class="kitch-tab active" onclick="showSection('recipes',   this)">Recipes</button>
+    <button class="kitch-tab"        onclick="showSection('desserts',  this)">Desserts</button>
     <button class="kitch-tab"        onclick="showSection('dressings', this)">Salad Dressings</button>
     <button class="kitch-tab"        onclick="showSection('pantry',    this)">Pantry</button>
   </div>
@@ -678,6 +686,12 @@ permalink: /resources/kitchen/
   <div id="recipes" class="k-section active">
     <p class="k-section-sub">Click any card to see the full recipe and steps.</p>
     <div class="recipes-grid" id="recipes-grid"></div>
+  </div>
+
+  <!-- DESSERTS -->
+  <div id="desserts" class="k-section">
+    <p class="k-section-sub">Click any card to see the full recipe and steps.</p>
+    <div class="recipes-grid" id="desserts-grid"></div>
   </div>
 
   <!-- SALAD DRESSINGS -->
@@ -965,6 +979,176 @@ const recipes = [
       "Taste and adjust salt. Blend another 30 seconds for extra creaminess.",
       "Serve with olive oil drizzled on top and pita bread or veggies on the side."
     ]
+  },
+  {
+    id: 9,
+    name: "Mediterranean Salad",
+    tag: "veg",
+    tagLabel: "Vegetarian",
+    time: "25–35 min",
+    servings: "2–3 servings",
+    description: "A hearty chopped salad with chickpeas, crispy falafel, and a creamy tofu-tahini dressing. Roasted tomatoes and cauliflower optional but worth it.",
+    ingredients: [
+      "Cucumber", "Bell peppers", "Canned chickpeas", "Red onion", "Carrot",
+      "Falafel (frozen)", "Olive oil", "Cumin powder", "Onion powder",
+      "Garlic powder", "Salt", "Oregano", "No-salt seasoning",
+      "— Dressing —",
+      "Silken tofu", "Tahini", "Chili powder", "Maple syrup"
+    ],
+    optional: ["Roasted cherry tomatoes", "Roasted cauliflower", "Feta or burrata", "Bread or focaccia"],
+    steps: [
+      "Roast frozen falafel according to package instructions (usually 400°F for 20–25 min).",
+      "If using roasted additions: halve cherry tomatoes and/or cut cauliflower into florets. Toss with olive oil and salt and roast at 400°F for 20 minutes.",
+      "Dice cucumber, bell peppers, red onion, and carrot — use a food processor for speed.",
+      "Drain and rinse chickpeas. Combine with the diced veg in a large bowl. Toss with olive oil, cumin, onion powder, garlic powder, salt, oregano, and no-salt seasoning.",
+      "Blend tofu, tahini, chili powder, garlic powder, no-salt seasoning, oregano, cumin powder, and maple syrup until smooth. Thin with a splash of water if needed. Adjust seasoning to taste.",
+      "Add falafel to the bowl. Pour dressing over and toss to coat.",
+      "Top with any roasted additions and finish with feta or burrata. Serve with bread or focaccia."
+    ]
+  },
+  {
+    id: 10,
+    name: "Ratatouille Casserole",
+    tag: "veg",
+    tagLabel: "Vegetarian",
+    time: "60–70 min",
+    servings: "4–6 servings",
+    description: "Layered aubergine, squash, potato, and courgette over a lentil-chickpea passata with capers, olives, and za'atar. Baked low and slow until caramelised.",
+    ingredients: [
+      "Aubergine (1)", "Butternut squash (¾)", "Potatoes, medium-small (5–6)",
+      "Courgettes (2)", "Za'atar (2 tsp)", "Crushed chilli (1½ tsp)",
+      "Extra virgin olive oil", "Maldon salt",
+      "Cooked lentils (220g)", "Cooked chickpeas (220g)",
+      "Capers (30g)", "Green olives (40g)", "Garlic (1 tsp)",
+      "Passata (1L)", "Parsley (¼ bunch)", "Sage and rosemary"
+    ],
+    optional: [],
+    steps: [
+      "Preheat oven to 180°C (350°F).",
+      "Slice aubergine, butternut squash, potatoes, and courgettes into even rounds or half-moons roughly 5mm thick.",
+      "Toss the sliced vegetables with olive oil, za'atar, crushed chilli, garlic, and Maldon salt until well coated.",
+      "In a large casserole or deep baking dish, combine passata, lentils, chickpeas, capers, olives, and most of the parsley. Stir to mix.",
+      "Arrange the seasoned vegetables on top in overlapping layers. Tuck in a few sage and rosemary sprigs. Drizzle with more olive oil.",
+      "Cover with a cartouche (a round of parchment paper pressed directly onto the surface) and bake at 180°C for 40 minutes.",
+      "Remove the cartouche and bake for a further 20 minutes, or until the top is caramelised and the sauce is bubbling around the edges.",
+      "Scatter over the remaining fresh parsley and finish with a drizzle of olive oil before serving."
+    ]
+  },
+  {
+    id: 11,
+    name: "Greek Yogurt Pizza",
+    tag: "quick",
+    tagLabel: "Quick",
+    time: "35 min",
+    servings: "1 serving",
+    description: "Two-ingredient dough — flour and Greek yogurt — no yeast, no rise time. Par-bake the crust, add toppings, done in 35 minutes.",
+    ingredients: [
+      "All-purpose flour, 1 cup",
+      "0% Greek yogurt, 1 cup",
+      "Baking powder, 2 tsp",
+      "Salt, ¼ tsp",
+      "Garlic powder, ¼ tsp",
+      "Olive oil (for greasing)"
+    ],
+    optional: ["Marinara sauce", "Shredded cheese", "Olives", "Sliced onions or veggies of choice"],
+    steps: [
+      "Preheat oven to 400°F (200°C).",
+      "In a bowl, whisk together flour, baking powder, salt, and garlic powder.",
+      "Add the Greek yogurt and mix with your hands. The dough will feel wet and sticky at first — keep working it until it comes together into a smoother ball. Add 1–2 tbsp extra flour if it's too sticky to handle.",
+      "For a thick crust: grease a 9–10 inch skillet with olive oil and press the dough in evenly. For a thinner crust: roll onto a parchment-lined baking tray instead.",
+      "Bake the plain dough for 10 minutes.",
+      "Remove from oven and add marinara sauce, cheese, and any toppings.",
+      "Return to oven and bake for another 15 minutes until the cheese is melted and the crust is golden at the edges."
+    ]
+  }
+];
+
+const desserts = [
+  {
+    id: 101,
+    name: "Dates & Walnut Cake",
+    tag: "dessert",
+    tagLabel: "Dessert",
+    time: "~2 hrs (incl. soak)",
+    servings: "6-inch cake",
+    description: "A naturally sweetened, dairy-friendly cake where blended date paste stands in for sugar. Dense, moist, and topped with toasted walnuts.",
+    ingredients: [
+      "25 pitted dates (197g)",
+      "Hot milk, 1½ cups (375g)",
+      "Vegetable oil, ½ cup (95g)",
+      "Whole wheat flour, 1 cup (120g)",
+      "Baking powder, ½ tsp",
+      "Baking soda, 1 tsp",
+      "Walnuts, chopped, ½ cup (50g)"
+    ],
+    optional: [],
+    steps: [
+      "Soak the pitted dates in hot milk for 1 hour until very soft.",
+      "In a bowl, whisk together flour, baking powder, and baking soda.",
+      "Blend the soaked dates and milk into a smooth paste. Transfer to a large bowl.",
+      "Add vegetable oil to the date paste and mix well.",
+      "Fold in the dry ingredients and whisk until just combined.",
+      "Pour batter into a lined 6-inch tin. Top evenly with chopped walnuts.",
+      "Bake at 180°C (350°F) for about 50 minutes, or until a skewer inserted in the centre comes out clean."
+    ]
+  },
+  {
+    id: 102,
+    name: "Pumpkin Bread",
+    tag: "dessert",
+    tagLabel: "Dessert",
+    time: "55–60 min",
+    servings: "1 loaf",
+    description: "A warmly spiced quick bread — moist from pumpkin puree with cinnamon, nutmeg, cloves, and ginger running through every slice.",
+    ingredients: [
+      "Pumpkin puree, 7.5 oz can",
+      "Eggs, 2 large",
+      "Vegetable oil, ½ cup",
+      "Water, ⅓ cup",
+      "White sugar, 1½ cups",
+      "All-purpose flour, 1¾ cups",
+      "Baking soda, 1 tsp",
+      "Salt, ½ tsp",
+      "Ground cinnamon, ½ tsp",
+      "Ground nutmeg, ½ tsp",
+      "Ground cloves, ¼ tsp",
+      "Ground ginger, ¼ tsp"
+    ],
+    optional: [],
+    steps: [
+      "Preheat oven to 350°F (175°C). Grease a 9×5 inch loaf pan.",
+      "In a large bowl, whisk together pumpkin puree, eggs, vegetable oil, and water until smooth.",
+      "Stir in the sugar until fully combined.",
+      "In a separate bowl, whisk together flour, baking soda, salt, cinnamon, nutmeg, cloves, and ginger.",
+      "Fold the dry ingredients into the wet mixture until just combined — don't overmix.",
+      "Pour the batter into the prepared loaf pan.",
+      "Bake for 45–50 minutes, or until a toothpick inserted in the centre comes out clean. Cool in the pan for 10 minutes before turning out."
+    ]
+  },
+  {
+    id: 103,
+    name: "Chocolate Mousse",
+    tag: "dessert",
+    tagLabel: "Dessert",
+    time: "10 min + chill",
+    servings: "2–3 servings",
+    description: "A vegan mousse that's surprisingly rich — silken tofu blended smooth with cocoa and melted chocolate, sweetened with maple syrup.",
+    ingredients: [
+      "Silken tofu",
+      "Water",
+      "Maple syrup",
+      "Vanilla extract",
+      "Cocoa powder",
+      "Melted chocolate"
+    ],
+    optional: [],
+    steps: [
+      "Melt the chocolate (microwave in 30-second bursts, stirring between each, or use a double boiler). Let it cool slightly.",
+      "Add tofu, water, maple syrup, vanilla extract, cocoa powder, and melted chocolate to a blender.",
+      "Blend until completely smooth, scraping down the sides as needed.",
+      "Taste and adjust — more maple syrup for sweetness, more cocoa for depth.",
+      "Pour into serving glasses or ramekins and refrigerate for at least 1 hour until set."
+    ]
   }
 ];
 
@@ -1036,7 +1220,10 @@ function showSection(id, btn) {
 
 /* ── Recipe rendering ────────────────────────── */
 function getTagClass(tag) {
-  return tag === 'veg' ? 'tag-veg' : tag === 'pantry' ? 'tag-pantry' : 'tag-quick';
+  if (tag === 'veg')     return 'tag-veg';
+  if (tag === 'pantry')  return 'tag-pantry';
+  if (tag === 'dessert') return 'tag-dessert';
+  return 'tag-quick';
 }
 
 function renderRecipes() {
@@ -1054,6 +1241,44 @@ function renderRecipes() {
       </div>
     </div>
   `).join('');
+}
+
+/* ── Dessert rendering ───────────────────────── */
+function renderDesserts() {
+  const grid = document.getElementById('desserts-grid');
+  grid.innerHTML = desserts.map(r => `
+    <div class="recipe-card" onclick="openDessert(${r.id})">
+      <div class="recipe-card-header">
+        <span class="recipe-tag ${getTagClass(r.tag)}">${r.tagLabel}</span>
+        <h3>${r.name}</h3>
+      </div>
+      <p class="recipe-card-desc">${r.description}</p>
+      <div class="recipe-meta">
+        <span>${r.time}</span>
+        <span>${r.servings}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openDessert(id) {
+  const r = desserts.find(x => x.id === id);
+  document.getElementById('modal-title').textContent = r.name;
+  document.getElementById('modal-meta').textContent = r.time + ' · ' + r.servings;
+  document.getElementById('modal-ingredients').innerHTML = r.ingredients
+    .map(i => `<span class="ing-pill">${i}</span>`).join('');
+  const optWrap = document.getElementById('modal-optional-wrap');
+  if (r.optional && r.optional.length) {
+    optWrap.style.display = 'block';
+    document.getElementById('modal-optional').innerHTML = r.optional
+      .map(i => `<span class="ing-pill optional">${i}</span>`).join('');
+  } else {
+    optWrap.style.display = 'none';
+  }
+  document.getElementById('modal-steps').innerHTML = r.steps
+    .map(s => `<li>${s}</li>`).join('');
+  document.getElementById('k-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 /* ── Recipe modal ────────────────────────────── */
@@ -1264,4 +1489,5 @@ document.addEventListener('keydown', e => {
 });
 
 renderRecipes();
+renderDesserts();
 </script>
