@@ -1,0 +1,661 @@
+---
+layout: default
+title: Recipe Booklet — Weeknight Kitchen
+permalink: /resources/recipes-booklet/
+---
+
+<style>
+/* ── Booklet page ───────────────────────────── */
+.booklet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.booklet-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  transition: color 0.15s;
+}
+.booklet-back:hover { color: var(--fg-muted); }
+
+.booklet-print-btn {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 7px 18px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border-mid);
+  background: var(--fg);
+  color: var(--bg);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.booklet-print-btn:hover { opacity: 0.8; }
+
+.booklet-meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.07em;
+  color: var(--fg-faint);
+  margin-top: 0.25rem;
+  margin-bottom: 3rem;
+}
+
+/* ── Table of contents ──────────────────────── */
+.toc {
+  margin-bottom: 3rem;
+}
+.toc-title {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  padding-bottom: 0.4rem;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.toc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+.toc-num {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--fg-faint);
+  min-width: 1.5rem;
+}
+.toc-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+.toc-tag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-left: auto;
+}
+
+/* ── Recipe entries ─────────────────────────── */
+.booklet-recipe {
+  padding: 2rem 0;
+  border-top: 0.5px solid var(--border);
+}
+.booklet-recipe:first-child { border-top: none; }
+
+.br-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 0.5px solid transparent;
+  margin-bottom: 0.5rem;
+}
+.br-tag-veg     { background: #E1F5EE; color: #0F6E56; border-color: #9FE1CB; }
+.br-tag-quick   { background: #F5E8DF; color: #B85C2A; }
+.br-tag-pantry  { background: #F7F0DF; color: #BA7517; }
+[data-theme="dark"] .br-tag-veg   { background: #085041; color: #5DCAA5; border-color: #0F6E56; }
+[data-theme="dark"] .br-tag-quick { background: #2E1508; color: #D4845A; }
+[data-theme="dark"] .br-tag-pantry{ background: #2C1E06; color: #D4A840; }
+
+.br-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--fg);
+  line-height: 1.25;
+  margin-bottom: 0.25rem;
+}
+.br-sub {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--fg-faint);
+  margin-bottom: 0.6rem;
+}
+.br-desc {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 560px;
+}
+
+.br-cols {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 2rem;
+}
+@media (max-width: 600px) {
+  .br-cols { grid-template-columns: 1fr; }
+}
+
+.br-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  padding-bottom: 0.4rem;
+  border-bottom: 0.5px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+
+.br-ing-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.br-ing-list li {
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  line-height: 1.4;
+  padding-left: 0.9rem;
+  position: relative;
+}
+.br-ing-list li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--fg-faint);
+}
+.br-ing-list li.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.57rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+.br-ing-list li.section-label::before { content: ""; }
+
+.br-steps-list {
+  list-style: none;
+  counter-reset: brsteps;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.br-steps-list li {
+  counter-increment: brsteps;
+  display: flex;
+  gap: 0.8rem;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+.br-steps-list li::before {
+  content: counter(brsteps);
+  min-width: 22px;
+  height: 22px;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  color: var(--fg-faint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Print styles ───────────────────────────── */
+@media print {
+  header, nav, footer, .booklet-header, .booklet-back,
+  .booklet-print-btn { display: none !important; }
+
+  body, main { background: #fff !important; color: #111 !important; }
+
+  .booklet-meta { margin-bottom: 1.5rem; }
+
+  .booklet-recipe { page-break-inside: avoid; }
+  .booklet-recipe + .booklet-recipe { page-break-before: always; }
+
+  .br-tag-veg   { background: #E1F5EE !important; color: #0F6E56 !important; }
+  .br-tag-quick { background: #F5E8DF !important; color: #B85C2A !important; }
+  .br-tag-pantry{ background: #F7F0DF !important; color: #BA7517 !important; }
+}
+</style>
+
+<main>
+
+  <div class="booklet-header">
+    <a href="/resources/kitchen" class="booklet-back">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7.5 2L3.5 6l4 4"/>
+      </svg>
+      Weeknight Kitchen
+    </a>
+    <button class="booklet-print-btn" onclick="window.print()">Save as PDF</button>
+  </div>
+
+  <div class="page-title">Recipe Booklet</div>
+  <p class="booklet-meta" id="booklet-meta"></p>
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list" id="toc-list"></ul>
+  </div>
+
+  <div id="booklet-recipes"></div>
+
+</main>
+
+<script>
+const recipes = [
+  {
+    id: 1,
+    name: "Veggie Enchiladas",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "25–30 min", servings: "4 servings",
+    description: "Roasted Normandy veggies, black beans, and cheese rolled in soft tortillas with enchilada sauce.",
+    ingredients: ["Bell peppers", "Onion", "Frozen Normandy veggies", "Avocado oil", "Taco seasoning", "Salt & pepper", "Canned black beans", "Cheese", "Soft tortillas", "Enchilada sauce"],
+    optional: ["Extra cheese for topping"],
+    steps: [
+      "Defrost the Normandy vegetables.",
+      "Heat avocado oil in a pan over medium-high. Sauté bell peppers and onion for 3–4 minutes until softened.",
+      "Add the defrosted Normandy veggies. Season with taco seasoning, salt, and pepper. Cook another 3–4 minutes.",
+      "Stir in the canned black beans. Adjust seasoning to taste. Add cheese to the filling and mix to bind.",
+      "Wrap filling in soft tortillas. For a baked version: layer tortillas in a baking dish, add filling, cover with more tortillas.",
+      "Pour enchilada sauce over the top. Cover dish with foil. Bake at 350°F for 10–15 minutes.",
+      "Serve hot, topped with extra cheese if desired."
+    ]
+  },
+  {
+    id: 2,
+    name: "Thai Curry with Tofu",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "20–25 min", servings: "3–4 servings",
+    description: "Sautéed Asian veggies and tofu simmered in Thai curry sauce, served over brown rice.",
+    ingredients: ["Frozen Asian veggies", "Oil", "Soft tofu", "Thai curry sauce", "Brown rice", "Salt"],
+    optional: ["Frozen edamame", "Frozen gyoza"],
+    steps: [
+      "Cook brown rice according to package directions simultaneously.",
+      "Defrost the frozen Asian veggies.",
+      "Heat oil in a pan or wok over medium-high. Sauté the defrosted veggies for 3–4 minutes.",
+      "Add frozen edamame if using. Stir to combine.",
+      "Pour in the Thai curry sauce. Add the soft tofu, gently stirring to avoid breaking it up too much.",
+      "Add frozen gyoza to the curry if using.",
+      "Let everything simmer together for 6–10 minutes. Season with salt if needed.",
+      "Serve over the cooked brown rice."
+    ]
+  },
+  {
+    id: 3,
+    name: "Coconut Veggie Curry",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "25–30 min", servings: "4 servings",
+    description: "Normandy veggies and legumes simmered in spiced coconut milk — a warm, flexible weeknight staple.",
+    ingredients: ["Frozen Normandy veggies", "Oil", "Salt & pepper", "Cumin powder", "Coriander powder", "Turmeric", "Chili powder", "Canned beans or chickpeas", "Coconut milk"],
+    optional: ["Frozen edamame", "Soft tofu", "Baby spinach"],
+    steps: [
+      "Defrost the Normandy vegetables.",
+      "Heat oil in a large pan over medium. Add the veggies and sauté for 3–4 minutes.",
+      "Season with salt, pepper, cumin, coriander, turmeric, and chili powder. Stir well for 1–2 minutes.",
+      "Add canned beans or chickpeas.",
+      "Pour in the coconut milk. Stir to combine and bring to a gentle simmer.",
+      "Add tofu or edamame if using for extra protein.",
+      "Stir in baby spinach in the last 2 minutes if using. Simmer 5–8 more minutes until heated through.",
+      "Taste and adjust seasoning. Serve over rice or with naan."
+    ]
+  },
+  {
+    id: 4,
+    name: "Peanut Noodles",
+    tag: "quick", tagLabel: "30 min",
+    time: "20 min", servings: "2–3 servings",
+    description: "Noodles tossed in a punchy peanut-ginger sauce with sautéed Asian vegetables.",
+    ingredients: ["Maggi noodles", "Frozen Asian veggies", "Peanut butter", "Soy sauce", "Ginger (fresh or paste)", "Chili crunch oil", "Rice vinegar", "Oil"],
+    optional: [],
+    steps: [
+      "Cook noodles according to package directions. Reserve a splash of cooking water before draining.",
+      "While noodles cook, defrost Asian veggies and sauté in oil over medium-high for 3–4 minutes.",
+      "Whisk together peanut butter, soy sauce, ginger, chili crunch oil, and rice vinegar to make the sauce. Thin with a little water if needed.",
+      "Add drained noodles to the pan with the veggies. Pour peanut sauce over everything.",
+      "Toss well over medium heat for 1–2 minutes until coated and heated through.",
+      "Serve immediately."
+    ]
+  },
+  {
+    id: 5,
+    name: "Quick Tomato Pasta",
+    tag: "quick", tagLabel: "30 min",
+    time: "20–25 min", servings: "3–4 servings",
+    description: "Al dente protein pasta in a quick spiced tomato sauce with optional greens.",
+    ingredients: ["Canned tomato sauce", "Protein pasta", "Salt & pepper", "Onion powder", "Chili flakes", "Oregano", "Olive oil"],
+    optional: ["Broccoli", "Baby spinach"],
+    steps: [
+      "Heat olive oil in a saucepan. Add canned tomato sauce and season with salt, pepper, onion powder, chili flakes, and oregano.",
+      "Simmer the sauce over low heat for 8–10 minutes to develop flavor.",
+      "Bring a separate pot of salted water to a boil. Cook protein pasta to al dente per package directions.",
+      "If using broccoli, add it to the pasta water in the last 3 minutes of cooking.",
+      "Drain pasta (and broccoli) and add directly to the sauce. Stir in baby spinach if using.",
+      "Let everything simmer together for 4 minutes. Taste and adjust seasoning before serving."
+    ]
+  },
+  {
+    id: 6,
+    name: "Miso Noodle Soup",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "25–30 min", servings: "3–4 servings",
+    description: "A hearty Japanese-inspired broth with mushrooms, tofu, Asian veggies, and noodles.",
+    ingredients: ["Olive oil", "Onion", "Salt", "Mushrooms", "Broth", "Frozen Asian veggies", "Soft tofu", "Noodles", "Sesame oil", "Soy sauce"],
+    optional: [],
+    steps: [
+      "Heat 2 tbsp olive oil in a large pot over medium. Add onion and a pinch of salt. Sauté for 3 minutes.",
+      "Add mushrooms and stir. Sauté 10–15 minutes until browned and most of the moisture has cooked off.",
+      "Add broth and bring to a boil.",
+      "Add the frozen Asian veggies. Reduce heat and simmer for 5 minutes.",
+      "Add soft tofu. Cook another 2–3 minutes just until heated through.",
+      "Add noodles to the pot and cook per package directions.",
+      "Remove from heat. Season with salt to taste. Ladle into bowls and finish with a splash of sesame oil and soy sauce."
+    ]
+  },
+  {
+    id: 7,
+    name: "Homemade Hummus",
+    tag: "pantry", tagLabel: "Pantry",
+    time: "10 min", servings: "6–8 servings",
+    description: "Ultra-creamy hummus with tahini and silken tofu — great as a dip, spread, or meal base.",
+    ingredients: ["Canned chickpeas", "Tahini", "Soft tofu", "Olive oil", "Cold water", "Salt"],
+    optional: ["Lemon juice", "Garlic"],
+    steps: [
+      "Drain and rinse the canned chickpeas.",
+      "Add chickpeas, tahini, soft tofu, and a generous pinch of salt to a food processor.",
+      "Add lemon juice and garlic if using.",
+      "Start blending. With the processor running, drizzle in cold water and olive oil until you reach your preferred consistency.",
+      "Taste and adjust salt. Blend another 30 seconds for extra creaminess.",
+      "Serve with olive oil drizzled on top and pita bread or veggies on the side."
+    ]
+  },
+  {
+    id: 8,
+    name: "Garlic Chili Knife-Pared Noodles",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "35–40 min", servings: "2 servings",
+    description: "Chewy ribbon noodles sautéed with baked tofu crumble, garlic, ginger, and chili oil — topped with crushed peanuts.",
+    ingredients: ["350g extra firm tofu", "2 tbsp dark soy sauce", "1 tbsp smoky spicy chili oil", "2 bundles knife-pared noodles (~100g each)", "2 green onion stalks", "1–2 cloves garlic", "Small piece of ginger", "2 tsp soy sauce", "2 tsp plant-based oyster sauce", "Toasted sesame oil", "2 tbsp peanuts", "2 tsp chili oil (for the pan)"],
+    optional: ["1 tsp umami powder"],
+    steps: [
+      "Preheat oven to 425°F. Pat tofu dry and crumble into a bowl. Mix with dark soy sauce, umami powder (if using), and 1 tbsp chili oil.",
+      "Spread tofu on a parchment-lined tray and bake for 20–25 minutes until chewy. Set aside 1 cup for this recipe.",
+      "Chop green onions and grate garlic and ginger. Whisk together soy sauce, plant-based oyster sauce, and a splash of sesame oil in a small bowl.",
+      "Toast peanuts in a dry pan for 2–3 minutes. Coarsely crush.",
+      "Cook knife-pared noodles per package instructions (~3 minutes). Drain thoroughly.",
+      "Return pan to medium heat, add 2 tsp chili oil. Sauté noodles for a few minutes.",
+      "Add garlic and ginger, sautéing 2 minutes more.",
+      "Add 1 cup of baked tofu crumble, green onions, and sauce. Sauté for a final 2 minutes until noodles are well-coated.",
+      "Fold in crushed peanuts and serve immediately."
+    ]
+  },
+  {
+    id: 9,
+    name: "Mediterranean Salad",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "25–35 min", servings: "2–3 servings",
+    description: "A hearty chopped salad with chickpeas, crispy falafel, and a creamy tofu-tahini dressing.",
+    ingredients: ["Cucumber", "Bell peppers", "Canned chickpeas", "Red onion", "Carrot", "Falafel (frozen)", "Olive oil", "Cumin powder", "Onion powder", "Garlic powder", "Salt", "Oregano", "No-salt seasoning", "— Dressing —", "Silken tofu", "Tahini", "Chili powder", "Maple syrup"],
+    optional: ["Roasted cherry tomatoes", "Roasted cauliflower", "Feta or burrata", "Bread or focaccia"],
+    steps: [
+      "Roast frozen falafel according to package instructions (usually 400°F for 20–25 min).",
+      "If using roasted additions: halve cherry tomatoes and/or cut cauliflower into florets. Toss with olive oil and salt and roast at 400°F for 20 minutes.",
+      "Dice cucumber, bell peppers, red onion, and carrot.",
+      "Drain and rinse chickpeas. Combine with the diced veg in a large bowl. Toss with olive oil and seasonings.",
+      "Blend tofu, tahini, chili powder, garlic powder, no-salt seasoning, oregano, cumin, and maple syrup until smooth. Thin with a splash of water if needed.",
+      "Add falafel to the bowl. Pour dressing over and toss to coat.",
+      "Top with any roasted additions and finish with feta or burrata. Serve with bread or focaccia."
+    ]
+  },
+  {
+    id: 10,
+    name: "Ratatouille Casserole",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "60–70 min", servings: "4–6 servings",
+    description: "Layered aubergine, squash, potato, and courgette over a lentil-chickpea passata with capers, olives, and za'atar.",
+    ingredients: ["Aubergine (1)", "Butternut squash (¾)", "Potatoes, medium-small (5–6)", "Courgettes (2)", "Za'atar (2 tsp)", "Crushed chilli (1½ tsp)", "Extra virgin olive oil", "Maldon salt", "Cooked lentils (220g)", "Cooked chickpeas (220g)", "Capers (30g)", "Green olives (40g)", "Garlic (1 tsp)", "Passata (1L)", "Parsley (¼ bunch)", "Sage and rosemary"],
+    optional: [],
+    steps: [
+      "Preheat oven to 180°C (350°F).",
+      "Slice aubergine, butternut squash, potatoes, and courgettes into even rounds roughly 5mm thick.",
+      "Toss the sliced vegetables with olive oil, za'atar, crushed chilli, garlic, and Maldon salt until well coated.",
+      "In a large casserole, combine passata, lentils, chickpeas, capers, olives, and most of the parsley.",
+      "Arrange the seasoned vegetables on top in overlapping layers. Tuck in sage and rosemary sprigs. Drizzle with more olive oil.",
+      "Cover with a cartouche (parchment pressed onto the surface) and bake at 180°C for 40 minutes.",
+      "Remove the cartouche and bake for a further 20 minutes until the top is caramelised.",
+      "Scatter remaining fresh parsley and finish with a drizzle of olive oil."
+    ]
+  },
+  {
+    id: 11,
+    name: "Greek Yogurt Pizza",
+    tag: "quick", tagLabel: "Quick",
+    time: "35 min", servings: "1 serving",
+    description: "Two-ingredient dough — flour and Greek yogurt — no yeast, no rise time. Done in 35 minutes.",
+    ingredients: ["All-purpose flour, 1 cup", "0% Greek yogurt, 1 cup", "Baking powder, 2 tsp", "Salt, ¼ tsp", "Garlic powder, ¼ tsp", "Olive oil (for greasing)"],
+    optional: ["Marinara sauce", "Shredded cheese", "Olives", "Sliced veggies of choice"],
+    steps: [
+      "Preheat oven to 400°F (200°C).",
+      "Whisk together flour, baking powder, salt, and garlic powder.",
+      "Add the Greek yogurt and mix with your hands until it comes together into a smooth ball. Add 1–2 tbsp extra flour if too sticky.",
+      "For a thick crust: grease a 9–10 inch skillet and press the dough in evenly. For a thinner crust: roll onto a parchment-lined baking tray.",
+      "Bake the plain dough for 10 minutes.",
+      "Remove from oven and add marinara sauce, cheese, and any toppings.",
+      "Return to oven and bake for another 15 minutes until the cheese is melted and the crust is golden."
+    ]
+  },
+  {
+    id: 12,
+    name: "Vegan Stuffed Cabbage Rolls",
+    tag: "veg", tagLabel: "Vegan",
+    time: "70–80 min", servings: "4–6 servings",
+    description: "Tender cabbage leaves filled with a mushroom, rice, and herb stuffing, baked in a rich tomato sauce.",
+    ingredients: ["1 whole cabbage", "— Filling —", "10 oz (280g) cooked rice", "14 oz (400g) mushrooms, finely chopped", "1 onion, diced", "2 garlic cloves, minced", "2 carrots, grated", "Fresh parsley & dill, finely chopped", "Salt & black pepper", "— Sauce —", "28 oz (793g) crushed tomatoes", "1 tbsp tomato paste", "1 onion, diced", "2 carrots, grated", "3 garlic cloves, minced", "2 bay leaves", "Salt & black pepper"],
+    optional: [],
+    steps: [
+      "Cut out the core and boil the whole cabbage in salted water for about 3 minutes. Remove the softened outer leaves. Repeat until you have enough — they should be flexible, not mushy.",
+      "Make the filling: sauté the onion in oil until soft. Add mushrooms and cook until browned. Stir in carrots, garlic, herbs, salt, and pepper. Mix with the cooked rice and set aside.",
+      "Trim the thick stems from each cabbage leaf. Add 1–2 heaping tablespoons of filling and roll up tightly like a wrap.",
+      "Line a baking dish with any leftover cabbage leaves. Arrange the rolls snugly in the dish.",
+      "Make the sauce: sauté the onion until soft. Add carrots and cook for a few minutes. Stir in tomato paste, then add crushed tomatoes. Simmer 5 minutes. Add garlic, salt, and pepper.",
+      "Pour the sauce over the cabbage rolls. Tuck in the bay leaves. Cover and bake at 350°F (180°C) for 50–60 minutes."
+    ]
+  },
+  {
+    id: 13,
+    name: "Quinoa & Roasted Vegetable Salad",
+    tag: "veg", tagLabel: "Vegan",
+    time: "30–35 min", servings: "3–4 servings",
+    description: "Fluffy quinoa tossed with pan-roasted eggplant, zucchini, and peppers, finished with sun-dried tomatoes and fresh basil.",
+    ingredients: ["200g quinoa", "2 white zucchini, cubed", "1 eggplant, cubed", "1 yellow bell pepper, cubed", "1 red horn pepper, cubed", "60g sun-dried tomatoes in oil", "1 garlic clove, crushed", "Fresh basil", "Extra virgin olive oil", "Salt & black pepper"],
+    optional: [],
+    steps: [
+      "Rinse the quinoa under cold running water. Add to a pot with 400ml water and a pinch of salt. Cover and cook over medium-low heat for 10 minutes until the water is absorbed. Fluff with a fork and let cool.",
+      "Wash and cut the zucchini and eggplant into cubes. Do the same with both peppers.",
+      "Heat a drizzle of olive oil in a pan over medium heat. Add the crushed garlic. Add the eggplant and cook for a few minutes until tender. Transfer to a plate and set aside.",
+      "In the same pan, add the zucchini and peppers with a pinch of salt. Cook until lightly golden and slightly crisp.",
+      "In a large bowl, combine the cooled quinoa, eggplant, zucchini, and peppers. Add the sun-dried tomatoes (roughly chopped) and a few torn fresh basil leaves.",
+      "Season with olive oil, salt, and pepper to taste. Mix well and serve topped with fresh basil leaves."
+    ]
+  },
+  {
+    id: 14,
+    name: "Crispy Quinoa & Roasted Asparagus Salad",
+    tag: "veg", tagLabel: "Vegan",
+    time: "45 min", servings: "4 servings",
+    description: "Oven-crisped quinoa over roasted asparagus, avocado, and edamame, tossed in a ginger-sesame dressing.",
+    ingredients: ["2 cups cooked quinoa, cooled", "1 tbsp tamari or soy sauce", "1 tbsp toasted sesame oil", "1 lb asparagus, woody ends trimmed", "1 tbsp olive oil", "½ tsp kosher salt", "1 cup edamame (frozen/thawed)", "1 large avocado, diced", "½ cup scallions, chopped", "¼ cup fresh basil, chopped", "— Ginger-Sesame Dressing —", "2 tbsp tahini", "2 tbsp seasoned rice vinegar", "1 tbsp tamari or soy sauce", "1 tbsp toasted sesame oil", "1 tbsp maple syrup", "1 tbsp fresh lime juice", "1½ tsp fresh ginger, grated", "½ tsp garlic, grated"],
+    optional: ["1–2 tbsp toasted sesame seeds"],
+    steps: [
+      "Preheat oven to 375°F (190°C). Line two large baking sheets with parchment paper.",
+      "On one sheet, toss the cooked quinoa with tamari and sesame oil. Spread into an even layer.",
+      "On the second sheet, toss asparagus with olive oil and salt, arranged in a single layer.",
+      "Place both pans in the oven — quinoa on the center rack, asparagus one rack below. Set a timer for 10 minutes.",
+      "After 10 minutes, remove the asparagus and set aside to cool. Toss the quinoa and return it to the oven for another 15 minutes until golden and crispy.",
+      "Whisk together all dressing ingredients in a jar or bowl until smooth.",
+      "Slice the cooled asparagus on the bias into 2-inch pieces. Combine in a large bowl with edamame, avocado, scallions, and basil.",
+      "Top with the crispy quinoa, pour dressing over everything, and gently toss. Garnish with sesame seeds if using. Best enjoyed fresh."
+    ]
+  },
+  {
+    id: 15,
+    name: "Sweet Potato Veggie Egg Bake",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "45–55 min", servings: "2–3 servings",
+    description: "Smashed sweet potato base layered with broccoli, peas, and red onion, topped with whisked eggs and melted cheese.",
+    ingredients: ["2 sweet potatoes", "1 cup broccoli, chopped", "½ cup peas", "¼ red onion, sliced", "3 eggs, whisked", "Handful of cheese", "Salt & black pepper"],
+    optional: ["Chilli flakes"],
+    steps: [
+      "Preheat the oven to 180°C (350°F).",
+      "Cook the sweet potatoes until soft — microwave, roast, or air fry.",
+      "In a prepared 9-inch baking dish, smash the sweet potatoes so they cover the base in an even layer.",
+      "Scatter the broccoli, peas, and sliced red onion over the sweet potato layer.",
+      "Pour the whisked eggs over the vegetables. Season with salt, pepper, and chilli flakes if using.",
+      "Sprinkle cheese evenly on top.",
+      "Bake for 30–40 minutes until the eggs are set and the top is golden."
+    ]
+  },
+  {
+    id: 16,
+    name: "High-Protein Cilantro Lime Rice",
+    tag: "veg", tagLabel: "Vegan",
+    time: "30–35 min", servings: "6 servings",
+    description: "Fluffy jasmine rice with edamame, scallions, and a bright lime-cilantro finish. 7.7g protein and 3g fiber per serving.",
+    ingredients: ["1½ cups dry white jasmine rice", "1½ cups frozen edamame, thawed", "½ cup cilantro or parsley, finely minced", "2–3 scallions, thinly sliced", "Juice and zest of 1 lime", "Kosher salt"],
+    optional: [],
+    steps: [
+      "Rinse and drain the rice 3–5 times under cold water until the water runs mostly clear.",
+      "Add the drained rice to a saucepan with a tight-fitting lid. Add 1½ cups + 3 tbsp water and a generous pinch of salt. Bring to a rapid simmer over medium-high heat.",
+      "Lower the heat to a gentle simmer, cover with the lid, and cook for 13 minutes until all the water is absorbed. Do not lift the lid while cooking.",
+      "Remove from heat and let the rice steam with the lid on for 10 minutes. Then fluff with a fork.",
+      "Add the edamame, scallions, lime zest, and lime juice to the pot. Stir until well combined.",
+      "Taste and adjust with extra salt or lime juice as needed before serving."
+    ]
+  },
+  {
+    id: 17,
+    name: "Channa Palak Masala",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "30–35 min", servings: "3–4 servings",
+    description: "Chickpeas and spinach simmered in a spiced onion-ginger masala, finished with a hot ghee tadka.",
+    ingredients: ["2 cups chana (chickpeas), soaked & boiled", "1 bunch palak (spinach)", "2 tsp ghee", "2 tsp ginger, sliced", "1 tsp jeera (cumin seeds)", "2 dried red chillies", "1 tsp kasuri methi", "1 onion, chopped", "1 tsp dhania (coriander) powder", "1 tsp garam masala", "½ cup chana water", "Salt to taste", "— Tadka —", "2 tsp ghee", "1 tsp red chilli powder", "1 tsp ginger, sliced", "2 dried red chillies"],
+    optional: [],
+    steps: [
+      "Blanch the palak in boiling water for 1–2 minutes. Transfer immediately to ice water, drain, and blend into a smooth paste.",
+      "Heat ghee in a pan over medium heat. Add jeera and let it splutter. Add dried red chillies and sliced ginger.",
+      "Add the chopped onion and sauté until golden brown. Season with salt.",
+      "Stir in dhania powder and garam masala. Cook for 1 minute.",
+      "Add the boiled chana along with ½ cup chana water. Mix well and simmer for 5 minutes.",
+      "Stir in the palak paste and kasuri methi. Simmer for 5–7 minutes until the curry comes together.",
+      "For the tadka: heat ghee in a small pan. Add sliced ginger and dried red chillies. Once fragrant, add red chilli powder and immediately pour over the curry.",
+      "Serve hot with rice or roti."
+    ]
+  },
+  {
+    id: 18,
+    name: "Dubki Wali Kadhi",
+    tag: "veg", tagLabel: "Vegetarian",
+    time: "30–35 min (+ 4–5 hrs soak)", servings: "3–4 servings",
+    description: "Tangy yogurt kadhi with soft urad dal pakoras simmered right in the broth, finished with a Kashmiri red chilli tadka.",
+    ingredients: ["½ cup urad dal, soaked 4–5 hours", "4–5 garlic cloves", "1 inch ginger", "2 green chillies", "½ tsp black pepper powder", "Salt to taste", "1 cup dahi (yogurt)", "2 cups water", "Oil", "1 tsp jeera (cumin seeds)", "1 tsp mustard seeds", "1 medium onion, finely chopped", "8–10 curry leaves", "1 tsp turmeric powder", "1 tbsp red chilli powder", "— Tadka —", "Kashmiri red chilli powder", "Whole dried red chillies", "Fresh coriander, chopped"],
+    optional: [],
+    steps: [
+      "Drain the soaked urad dal and grind with garlic, ginger, green chillies, and black pepper into a smooth batter.",
+      "Whisk the batter until fluffy and season with salt.",
+      "In a bowl, whisk together the dahi, 2 tbsp of the urad dal batter, and 2 cups of water until smooth.",
+      "Heat oil in a kadhai over medium heat. Add jeera and mustard seeds and let them splutter. Add onion and curry leaves and sauté until the onion softens.",
+      "Add turmeric and red chilli powder, stir for 30 seconds, then pour in the dahi mixture.",
+      "Cook for 7–8 minutes, stirring occasionally, until the kadhi thickens slightly.",
+      "Drop small spoonfuls of the remaining urad dal batter directly into the simmering kadhi to form pakoras. Cook for 7–8 minutes until set.",
+      "Finish with a tadka: heat a little oil, add Kashmiri red chilli powder and dried red chillies, and pour immediately over the kadhi. Garnish with fresh coriander and serve with hot rice."
+    ]
+  }
+];
+
+function tagClass(tag) {
+  if (tag === 'veg')    return 'br-tag-veg';
+  if (tag === 'pantry') return 'br-tag-pantry';
+  return 'br-tag-quick';
+}
+
+function renderTOC() {
+  const list = document.getElementById('toc-list');
+  list.innerHTML = recipes.map((r, i) => `
+    <li class="toc-item">
+      <span class="toc-num">${String(i + 1).padStart(2, '0')}</span>
+      <span class="toc-name">${r.name}</span>
+      <span class="toc-tag">${r.tagLabel} · ${r.time}</span>
+    </li>
+  `).join('');
+}
+
+function renderRecipes() {
+  const container = document.getElementById('booklet-recipes');
+  container.innerHTML = recipes.map(r => {
+    const ings = r.ingredients.map(ing => {
+      if (ing.startsWith('—') && ing.endsWith('—')) {
+        return `<li class="section-label">${ing.replace(/—/g, '').trim()}</li>`;
+      }
+      return `<li>${ing}</li>`;
+    }).join('');
+
+    const optHTML = r.optional && r.optional.length
+      ? `<li class="section-label">Optional</li>${r.optional.map(o => `<li>${o}</li>`).join('')}`
+      : '';
+
+    return `
+      <div class="booklet-recipe">
+        <span class="br-tag ${tagClass(r.tag)}">${r.tagLabel}</span>
+        <div class="br-title">${r.name}</div>
+        <div class="br-sub">${r.time} &middot; ${r.servings}</div>
+        <div class="br-desc">${r.description}</div>
+        <div class="br-cols">
+          <div>
+            <div class="br-label">Ingredients</div>
+            <ul class="br-ing-list">${ings}${optHTML}</ul>
+          </div>
+          <div>
+            <div class="br-label">Steps</div>
+            <ol class="br-steps-list">${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('booklet-meta').textContent =
+  `${recipes.length} recipes — all vegetarian`;
+
+renderTOC();
+renderRecipes();
+</script>
